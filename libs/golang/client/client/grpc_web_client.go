@@ -25,13 +25,17 @@ func (c *Client) doGrpcWebCall(req proto.Message) ([]byte, int, error) {
 	httpResp, err := c.sendGrpcWebRequest(httpReq)
 	if httpResp != nil {
 		defer func(Body io.ReadCloser) {
-			err := Body.Close()
+			err = Body.Close()
 			if err != nil {
 				fmt.Printf("Error closing body: %v\n", err)
 			}
 		}(httpResp.Body)
 		if httpResp.StatusCode == http.StatusUnauthorized {
-			return nil, httpResp.StatusCode, fmt.Errorf("unauthorized - status %v", httpResp.Status)
+			err = c.refreshAuth()
+			if err != nil {
+				return nil, httpResp.StatusCode, fmt.Errorf("error refreshing auth: %v", err)
+			}
+			return c.doGrpcWebCall(req)
 		}
 	}
 	if err != nil {

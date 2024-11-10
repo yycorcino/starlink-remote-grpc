@@ -53,9 +53,9 @@ Note that some calls can be made via Stream instead of gRPC unary calls.
 
 The following languages are supported for client libraries:
 
-- [x] [GO](libs/golang/client/GOLANG_LIB.md)
-- [ ] Python
-- [ ] Node (Typescript)
+- [x] [GO](libs/golang/client/README)
+- [ ] [Python](libs/python/starlink-client/README.md)
+- [ ] Javascript
 - [ ] Dart
 - [ ] Java
 - [ ] Kotlin

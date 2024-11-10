@@ -15,9 +15,11 @@ plugins:
 
   # Python
   - plugin: buf.build/grpc/python
-    out: libs/python/gen
+    out: libs/python/starlink-client
   - plugin: buf.build/protocolbuffers/python
-    out: libs/python/gen
+    out: libs/python/starlink-client
+  - plugin: buf.build/protocolbuffers/pyi:v28.3
+    out: libs/python/starlink-client
 
   # Dart
   - plugin: buf.build/protocolbuffers/dart

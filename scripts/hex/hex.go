@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	filename := "file.txt"
+	filename := "/Users/hectoroliveros/GolandProjects/test13/starlink-client/scripts/hex/file.txt"
 
 	data, err := os.ReadFile(filename)
 	if err != nil {
