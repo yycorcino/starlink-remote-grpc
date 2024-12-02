@@ -26,6 +26,10 @@ func (c *Client) refreshAuth() error {
 	if err != nil {
 		return err
 	}
+	_, err = http.ParseCookie(c.cookies)
+	if err != nil {
+		return fmt.Errorf("error parsing cookies: %v", err)
+	}
 	req.Header.Set("Cookie", c.cookies)
 
 	resp, err := c.httpClient.Do(req)
