@@ -1,11 +1,19 @@
+from cookies_parser import parse_cookie_json
 from spacex.api.device.wifi_config_pb2 import WifiConfig
 from starlink_client.grpc_web_client import GrpcWebClient
 
 if __name__ == "__main__":
-    initial_cookies = "cookies HERE"
+    #  You can create the cookie json using this chrome extension:
+    # https://chromewebstore.google.com/detail/copythiscookiebytaskmagic/mjdcjjjpadgkmpajafmpnponggdohdhl
+    # You need to go to the Starlink web interface, log in,
+    #  and then copy the cookies using the extension and save them to a file
+    with open("cookies.json", "r") as f:
+        cookie_json = f.read()
+        initial_cookies = parse_cookie_json(cookie_json)
+
     client = GrpcWebClient(initial_cookies, "dir_cookies")
 
-    status = client.get_wifi_status("Router-010000000000000000499851")
+    status = client.get_wifi_status("Router-010000000000000000425511")
     print("-------------------------")
     print("ID: " + status.device_info.id)
     print("Software Version: " + status.device_info.software_version)

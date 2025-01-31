@@ -17,6 +17,7 @@ class GrpcWebClient(GrpcWebBaseClient):
         Returns:
             device_pb2.WifiConfig: Wi-Fi configuration of the router.
         """
+        router_id = self.add_prefix_to_router_id(router_id)
         grpc_req = Request(target_id=router_id, get_status=GetStatusRequest())
         resp = self.call(grpc_req)
         return resp.wifi_get_status

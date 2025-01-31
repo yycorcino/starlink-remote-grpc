@@ -5,3 +5,4 @@ protobuf
 requests
 httpx
 pydantic
+httpx[http2]

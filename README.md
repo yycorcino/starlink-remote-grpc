@@ -7,7 +7,7 @@ This library allows you to connect to the Starlink system in two ways:
 - **Remotely via the Starlink API**: This requires authentication, and communication is done through gRPC-Web and REST.
 
 Note: The starlink dish run a gRPC server on port 9200, but it is not exposed to the internet.
-![arch.png](docs/imgs/arch.png)
+![arch.png](https://raw.githubusercontent.com/Eitol/starlink-client/refs/heads/main/docs/imgs/arch.png)
 
 The .proto files were obtained from the antenna itself, using grpc-curl.
 
@@ -53,8 +53,8 @@ Note that some calls can be made via Stream instead of gRPC unary calls.
 
 The following languages are supported for client libraries:
 
-- [x] [GO](libs/golang/client/README.md)
-- [x] [Python](libs/python/starlink-client/README.md)
+- [x] [GO](https://github.com/Eitol/starlink-client/tree/main/libs/golang/client)
+- [x] [Python](https://github.com/Eitol/starlink-client/tree/main/libs/python/starlink-client)
 - [ ] Javascript
 - [ ] Dart
 - [ ] Java
