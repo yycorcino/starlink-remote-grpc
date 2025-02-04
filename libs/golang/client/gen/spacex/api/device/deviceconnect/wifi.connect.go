@@ -37,12 +37,6 @@ const (
 	MeshMeshStreamProcedure = "/SpaceX.API.Device.Mesh/MeshStream"
 )
 
-// These variables are the protoreflect.Descriptor objects for the RPCs defined in this package.
-var (
-	meshServiceDescriptor          = device.File_spacex_api_device_wifi_proto.Services().ByName("Mesh")
-	meshMeshStreamMethodDescriptor = meshServiceDescriptor.Methods().ByName("MeshStream")
-)
-
 // MeshClient is a client for the SpaceX.API.Device.Mesh service.
 type MeshClient interface {
 	MeshStream(context.Context) *connect.BidiStreamForClient[device.ToController, device.FromController]
@@ -57,11 +51,12 @@ type MeshClient interface {
 // http://api.acme.com or https://acme.com/grpc).
 func NewMeshClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) MeshClient {
 	baseURL = strings.TrimRight(baseURL, "/")
+	meshMethods := device.File_spacex_api_device_wifi_proto.Services().ByName("Mesh").Methods()
 	return &meshClient{
 		meshStream: connect.NewClient[device.ToController, device.FromController](
 			httpClient,
 			baseURL+MeshMeshStreamProcedure,
-			connect.WithSchema(meshMeshStreamMethodDescriptor),
+			connect.WithSchema(meshMethods.ByName("MeshStream")),
 			connect.WithClientOptions(opts...),
 		),
 	}
@@ -88,10 +83,11 @@ type MeshHandler interface {
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
 func NewMeshHandler(svc MeshHandler, opts ...connect.HandlerOption) (string, http.Handler) {
+	meshMethods := device.File_spacex_api_device_wifi_proto.Services().ByName("Mesh").Methods()
 	meshMeshStreamHandler := connect.NewBidiStreamHandler(
 		MeshMeshStreamProcedure,
 		svc.MeshStream,
-		connect.WithSchema(meshMeshStreamMethodDescriptor),
+		connect.WithSchema(meshMethods.ByName("MeshStream")),
 		connect.WithHandlerOptions(opts...),
 	)
 	return "/SpaceX.API.Device.Mesh/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

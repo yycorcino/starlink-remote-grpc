@@ -1,6 +1,7 @@
 import grpc
 import time
-from spacex.api.device import device_pb2_grpc, device_pb2
+from spacex.api.device import device_pb2
+from spacex.api.device import device_pb2_grpc
 from contextlib import contextmanager
 
 from starlink_client.location import Location
@@ -32,6 +33,10 @@ class GrpcClient:
             raise TimeoutError(ERR_TIMEOUT)
 
     def get_location(self) -> Location:
+        """
+        Get the location of the device
+        (Only works when the device is connected to the Starlink network)
+        """
         grpc_req = device_pb2.Request(
             get_location=device_pb2.GetLocationRequest()
         )
@@ -43,10 +48,3 @@ class GrpcClient:
             lon=lon,
             alt=resp.get_location.lla.alt
         )
-
-
-if __name__ == "__main__":
-    host = STARLINK_LAN_GRPC_SERVER_ADDRESS
-    client = GrpcClient(host)
-    location = client.get_location()
-    print(location)

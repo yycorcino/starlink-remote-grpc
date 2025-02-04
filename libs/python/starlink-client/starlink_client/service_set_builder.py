@@ -1,8 +1,7 @@
-from build.lib.starlink_client.wifi_config import CurrentWifiConfig
 from spacex.api.device.device_pb2 import Request
 from spacex.api.device.wifi_config_pb2 import WifiConfig, AuthWpa2
 from spacex.api.device.wifi_pb2 import WifiSetConfigRequest, WifiGetStatusResponse
-from starlink_client.wifi_config import NewWifiConfig
+from starlink_client.wifi_config import NewWifiConfig, CurrentWifiConfig
 
 
 class ServiceSetBuilder:

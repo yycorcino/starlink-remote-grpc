@@ -1,16 +1,16 @@
-from setuptools import setup, find_packages
-
-with open("../../../README.md", "r", encoding="utf-8") as fh:
-    long_description = fh.read()
+from setuptools import setup, find_namespace_packages
 
 with open("README.md", "r", encoding="utf-8") as fh:
-    long_description = f"{long_description}\n\n{fh.read()}"
+    long_description = fh.read()
 
 setup(
     name="starlink-client",
-    version="0.1.0",
-    packages=find_packages(include=["starlink_client", "starlink_client.*"]),
-    include_package_data=True,
+    version="0.1.13",
+    # Buscamos paquetes namespace en "starlink_client*" y "spacex*"
+    packages=find_namespace_packages(
+        include=["starlink_client*", "spacex*"]
+    ),
+    include_package_data=True,  # necesario si usamos MANIFEST.in
     install_requires=[
         "grpcio",
         "grpcio-status",
@@ -19,6 +19,7 @@ setup(
         "requests",
         "httpx",
         "pydantic",
+        "httpx[http2]",
     ],
     description="A Python client for Starlink.",
     author="Hector Oliveros",

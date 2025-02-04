@@ -41,13 +41,6 @@ const (
 	UnlockServiceFinishUnlockProcedure = "/SpaceX.API.Device.Services.Unlock.UnlockService/FinishUnlock"
 )
 
-// These variables are the protoreflect.Descriptor objects for the RPCs defined in this package.
-var (
-	unlockServiceServiceDescriptor            = unlock.File_spacex_api_device_services_unlock_service_proto.Services().ByName("UnlockService")
-	unlockServiceStartUnlockMethodDescriptor  = unlockServiceServiceDescriptor.Methods().ByName("StartUnlock")
-	unlockServiceFinishUnlockMethodDescriptor = unlockServiceServiceDescriptor.Methods().ByName("FinishUnlock")
-)
-
 // UnlockServiceClient is a client for the SpaceX.API.Device.Services.Unlock.UnlockService service.
 type UnlockServiceClient interface {
 	StartUnlock(context.Context, *connect.Request[unlock.StartUnlockRequest]) (*connect.Response[unlock.StartUnlockResponse], error)
@@ -64,17 +57,18 @@ type UnlockServiceClient interface {
 // http://api.acme.com or https://acme.com/grpc).
 func NewUnlockServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) UnlockServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
+	unlockServiceMethods := unlock.File_spacex_api_device_services_unlock_service_proto.Services().ByName("UnlockService").Methods()
 	return &unlockServiceClient{
 		startUnlock: connect.NewClient[unlock.StartUnlockRequest, unlock.StartUnlockResponse](
 			httpClient,
 			baseURL+UnlockServiceStartUnlockProcedure,
-			connect.WithSchema(unlockServiceStartUnlockMethodDescriptor),
+			connect.WithSchema(unlockServiceMethods.ByName("StartUnlock")),
 			connect.WithClientOptions(opts...),
 		),
 		finishUnlock: connect.NewClient[unlock.FinishUnlockRequest, unlock.FinishUnlockResponse](
 			httpClient,
 			baseURL+UnlockServiceFinishUnlockProcedure,
-			connect.WithSchema(unlockServiceFinishUnlockMethodDescriptor),
+			connect.WithSchema(unlockServiceMethods.ByName("FinishUnlock")),
 			connect.WithClientOptions(opts...),
 		),
 	}
@@ -109,16 +103,17 @@ type UnlockServiceHandler interface {
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
 func NewUnlockServiceHandler(svc UnlockServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
+	unlockServiceMethods := unlock.File_spacex_api_device_services_unlock_service_proto.Services().ByName("UnlockService").Methods()
 	unlockServiceStartUnlockHandler := connect.NewUnaryHandler(
 		UnlockServiceStartUnlockProcedure,
 		svc.StartUnlock,
-		connect.WithSchema(unlockServiceStartUnlockMethodDescriptor),
+		connect.WithSchema(unlockServiceMethods.ByName("StartUnlock")),
 		connect.WithHandlerOptions(opts...),
 	)
 	unlockServiceFinishUnlockHandler := connect.NewUnaryHandler(
 		UnlockServiceFinishUnlockProcedure,
 		svc.FinishUnlock,
-		connect.WithSchema(unlockServiceFinishUnlockMethodDescriptor),
+		connect.WithSchema(unlockServiceMethods.ByName("FinishUnlock")),
 		connect.WithHandlerOptions(opts...),
 	)
 	return "/SpaceX.API.Device.Services.Unlock.UnlockService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

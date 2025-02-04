@@ -39,13 +39,6 @@ const (
 	DeviceHandleProcedure = "/SpaceX.API.Device.Device/Handle"
 )
 
-// These variables are the protoreflect.Descriptor objects for the RPCs defined in this package.
-var (
-	deviceServiceDescriptor      = device.File_spacex_api_device_device_proto.Services().ByName("Device")
-	deviceStreamMethodDescriptor = deviceServiceDescriptor.Methods().ByName("Stream")
-	deviceHandleMethodDescriptor = deviceServiceDescriptor.Methods().ByName("Handle")
-)
-
 // DeviceClient is a client for the SpaceX.API.Device.Device service.
 type DeviceClient interface {
 	Stream(context.Context) *connect.BidiStreamForClient[device.ToDevice, device.FromDevice]
@@ -61,17 +54,18 @@ type DeviceClient interface {
 // http://api.acme.com or https://acme.com/grpc).
 func NewDeviceClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) DeviceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
+	deviceMethods := device.File_spacex_api_device_device_proto.Services().ByName("Device").Methods()
 	return &deviceClient{
 		stream: connect.NewClient[device.ToDevice, device.FromDevice](
 			httpClient,
 			baseURL+DeviceStreamProcedure,
-			connect.WithSchema(deviceStreamMethodDescriptor),
+			connect.WithSchema(deviceMethods.ByName("Stream")),
 			connect.WithClientOptions(opts...),
 		),
 		handle: connect.NewClient[device.Request, device.Response](
 			httpClient,
 			baseURL+DeviceHandleProcedure,
-			connect.WithSchema(deviceHandleMethodDescriptor),
+			connect.WithSchema(deviceMethods.ByName("Handle")),
 			connect.WithClientOptions(opts...),
 		),
 	}
@@ -105,16 +99,17 @@ type DeviceHandler interface {
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
 func NewDeviceHandler(svc DeviceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
+	deviceMethods := device.File_spacex_api_device_device_proto.Services().ByName("Device").Methods()
 	deviceStreamHandler := connect.NewBidiStreamHandler(
 		DeviceStreamProcedure,
 		svc.Stream,
-		connect.WithSchema(deviceStreamMethodDescriptor),
+		connect.WithSchema(deviceMethods.ByName("Stream")),
 		connect.WithHandlerOptions(opts...),
 	)
 	deviceHandleHandler := connect.NewUnaryHandler(
 		DeviceHandleProcedure,
 		svc.Handle,
-		connect.WithSchema(deviceHandleMethodDescriptor),
+		connect.WithSchema(deviceMethods.ByName("Handle")),
 		connect.WithHandlerOptions(opts...),
 	)
 	return "/SpaceX.API.Device.Device/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

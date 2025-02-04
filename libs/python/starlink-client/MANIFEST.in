@@ -1,0 +1,4 @@
+include README.md
+
+recursive-include starlink_client *
+recursive-include spacex *

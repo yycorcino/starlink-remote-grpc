@@ -1,12 +1,43 @@
 from spacex.api.device.device_pb2 import Request, GetStatusRequest
+from spacex.api.device.dish_pb2 import DishGetStatusResponse
 from spacex.api.device.wifi_config_pb2 import WifiConfig
 from spacex.api.device.wifi_pb2 import WifiGetStatusResponse
-from starlink_client.grpc_web_base_client import AuthenticationError, ResponseError, GrpcWebBaseClient
+from starlink_client.dto import ServiceLinesResponse
+from starlink_client.grpc_web_base_client import ResponseError, GrpcWebBaseClient
 from starlink_client.service_set_builder import ServiceSetBuilder
 from starlink_client.wifi_config import NewWifiConfig
 
 
 class GrpcWebClient(GrpcWebBaseClient):
+    def get_service_lines(self) -> ServiceLinesResponse:
+        """
+        Get the service lines for the account.
+
+        Returns:
+            dict: The service lines for the account.
+        """
+        resp = self._client.get("https://api.starlink.com/webagg/v2/accounts/service-lines?limit=10&page=0&isConverting=false&serviceAddressId=&onlyActive=false&searchString=&onlyNoUts=false")
+        try:
+            return ServiceLinesResponse.model_validate_json(resp.text)
+        except Exception as e:
+            raise ResponseError(f"Failed to get service lines: {e}")
+
+    def get_dish_status(self, device_id: str) -> DishGetStatusResponse:
+        """
+        Get the status for a specific device.
+
+        Parameters:
+            device_id (str): The device's ID.
+
+        Returns:
+            device_pb2.DishGetStatusResponse: The device's status.
+        """
+        device_id = self._add_prefix_to_dish_id(device_id)
+        grpc_req = Request(target_id=device_id, get_status=GetStatusRequest())
+        resp = self.call(grpc_req)
+        return resp.dish_get_status
+
+
     def get_wifi_status(self, router_id: str) -> WifiGetStatusResponse:
         """
         Get the Wi-Fi status for a specific router.
@@ -17,7 +48,7 @@ class GrpcWebClient(GrpcWebBaseClient):
         Returns:
             device_pb2.WifiConfig: Wi-Fi configuration of the router.
         """
-        router_id = self.add_prefix_to_router_id(router_id)
+        router_id = self._add_prefix_to_router_id(router_id)
         grpc_req = Request(target_id=router_id, get_status=GetStatusRequest())
         resp = self.call(grpc_req)
         return resp.wifi_get_status
@@ -42,7 +73,7 @@ class GrpcWebClient(GrpcWebBaseClient):
             raise ValueError("Invalid 5GHz password: passwords must be between 8 and 32 characters")
 
         # Prefix the router ID as required
-        router_id = self.add_prefix_to_router_id(router_id)
+        router_id = self._add_prefix_to_router_id(router_id)
 
         # Build the request
         router_status = self.get_wifi_status(router_id)
@@ -63,7 +94,22 @@ class GrpcWebClient(GrpcWebBaseClient):
         return updated_wifi_config
 
     @staticmethod
-    def add_prefix_to_router_id(router_id: str) -> str:
+    def _add_prefix_to_dish_id(dish_id: str) -> str:
+        """
+        Prefix the dish ID as required by the client.
+
+        Parameters:
+            dish_id (str): The original dish ID.
+
+        Returns:
+            str: The prefixed dish ID.
+        """
+        if dish_id.startswith("ut"):
+            return dish_id
+        return f"ut{dish_id}"
+
+    @staticmethod
+    def _add_prefix_to_router_id(router_id: str) -> str:
         """
         Prefix the router ID as required by the client.
 
@@ -77,3 +123,5 @@ class GrpcWebClient(GrpcWebBaseClient):
         if router_id.startswith("Router-"):
             return router_id
         return f"Router-{router_id}"
+
+

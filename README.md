@@ -39,15 +39,13 @@ See: https://connectrpc.com/
 
 You can use the predefined methods provided by the library for these operations or make direct calls using the `call` method with the Request and Response messages defined in the "proto" directory.
 
+
 ## Authentication
 To extract the cookie from the browser, you need to log in from any browser and manually copy the cookie.
 
 The cookie lasts for 15 days, but the library supports cookie refresh, which allows for longer use if the cookie is refreshed regularly. Simply use the library within 15 days, and it will save the refreshed cookie in a directory.
 
 Note that some calls can be made via Stream instead of gRPC unary calls.
-
-
-
 
 ## Supported Client Libraries
 

@@ -14,6 +14,8 @@ plugins:
     opt: paths=source_relative
 
   # Python
+#  - plugin: buf.build/community/danielgtaylor-betterproto
+#    out: libs/python/starlink-client/starlink_client/gen
   - plugin: buf.build/grpc/python
     out: libs/python/starlink-client
   - plugin: buf.build/protocolbuffers/python

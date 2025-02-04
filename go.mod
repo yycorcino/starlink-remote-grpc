@@ -5,6 +5,7 @@ go 1.22
 require (
 	connectrpc.com/connect v1.16.2
 	github.com/browserutils/kooky v0.2.2
+	github.com/uber/h3-go/v4 v4.1.2
 	golang.org/x/net v0.26.0
 	google.golang.org/protobuf v1.34.2
 )
@@ -19,7 +20,6 @@ require (
 	github.com/godbus/dbus/v5 v5.1.0 // indirect
 	github.com/gonuts/binary v0.2.0 // indirect
 	github.com/keybase/go-keychain v0.0.0-20231219164618-57a3676c3af6 // indirect
-	github.com/uber/h3-go/v4 v4.1.2 // indirect
 	github.com/zalando/go-keyring v0.2.5 // indirect
 	golang.org/x/crypto v0.24.0 // indirect
 	golang.org/x/sys v0.21.0 // indirect
