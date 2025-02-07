@@ -1,16 +1,18 @@
-# starlink_client/grpc_web_base_client.py
+"""
+The core functions of interacting with Starlink API.
+"""
 
-from typing import Optional
+import os
 import httpx
 import time
-from contextlib import contextmanager
-from spacex.api.device import device_pb2
-from http.cookies import SimpleCookie
 import threading
 import json
 import hashlib
-import os
+from typing import Optional
 from http.cookiejar import Cookie
+from contextlib import contextmanager
+from http.cookies import SimpleCookie
+from spacex.api.device import device_pb2
 
 # API URLs
 STARLINK_GRPC_WEB_API_URL = "https://api2.starlink.com/SpaceX.API.Device.Device/Handle"
@@ -36,16 +38,13 @@ class GrpcWebBaseClient:
     def __init__(self):
         """
         Initialize the gRPC-Web client.
-
-        Parameters:
-            initial_cookies (str): The initial cookies for authentication.
-            cookie_storage_path (str): The path to store cookies on disk.
         """
         self._url = STARLINK_GRPC_WEB_API_URL
         self._auth_url = STARLINK_AUTH_URL
         self._lock = threading.Lock()
         self._xsrf_token: Optional[str] = None
 
+        # Get cookies located in file cookies.json
         cookie_storage_path = "dir_cookies"
         with open("cookies.json", "r") as f:
             cookie_json = f.read()
@@ -62,9 +61,9 @@ class GrpcWebBaseClient:
         self._cookie_jar = httpx.Cookies()
 
         # HTTP client initialized con HTTP/2
-
         self._cookie = None
-        # Intentar cargar las cookies desde el archivo o establecer las cookies iniciales
+
+        # Try to load cookies from dir_cookies folder
         if os.path.exists(self._cookie_file):
             """Load cookies from a JSON file if available."""
             with open(self._cookie_file, 'r', encoding='utf-8') as f:
@@ -78,7 +77,6 @@ class GrpcWebBaseClient:
         self._refresh_auth()
         self._save_cookies_to_file()
 
-
     def parse_cookie_json(self, cookie_json: str) -> str:
         try:
             cookies = json.loads(cookie_json)
@@ -87,10 +85,10 @@ class GrpcWebBaseClient:
 
             return cookie_string
         except (json.JSONDecodeError, KeyError) as e:
-            raise ValueError(f"Error al procesar el JSON de cookies: {e}")
+            raise ValueError(f"Error processing the JSON of cookies: {e}")
     
     def _update_cookie_header(self):
-        """Reconstruye la cadena de cookies a partir del cookie jar."""
+        """Reconstruct the cookie string from the cookie jar."""
         self._cookie = "; ".join(
             [f"{name}={value}" for name, value in self._cookie_jar.items()])
 
@@ -109,9 +107,9 @@ class GrpcWebBaseClient:
 
         # Update the shared cookie jar with parsed cookies
         for key, value in self._cookies_dict.items():
-            # Se puede especificar domain/path si se requiere; en este ejemplo se usan valores por defecto.
+            # You can specify the domain/path if required; in this example, default values are used
             self._cookie_jar.set(key, value)
-        # Actualizar la cadena de cookies a partir del cookie jar
+        # Update the cookie string from the cookie jar
         self._update_cookie_header()
 
     def _save_cookies_to_file(self):
@@ -134,33 +132,6 @@ class GrpcWebBaseClient:
                 cookies_list.append(d)
         with open(self._cookie_file, 'w', encoding='utf-8') as f:
             json.dump(cookies_list, f, ensure_ascii=False, indent=4)
-
-    # def _load_cookies_from_file(self):
-    #
-    #     for cookie_dict in cookies_list:
-    #         cookie = Cookie(
-    #             version=0,
-    #             name=cookie_dict.get('name', ''),
-    #             value=cookie_dict.get('value', ''),
-    #             port=None,
-    #             port_specified=False,
-    #             domain=cookie_dict.get('domain', ''),
-    #             domain_specified=bool(cookie_dict.get('domain', '')),
-    #             domain_initial_dot=cookie_dict.get('domain', '').startswith(
-    #                 '.'),
-    #             path=cookie_dict.get('path', '/'),
-    #             path_specified=bool(cookie_dict.get('path', '/')),
-    #             secure=cookie_dict.get('secure', False),
-    #             expires=cookie_dict.get('expires', None),
-    #             discard=False,
-    #             comment=None,
-    #             comment_url=None,
-    #             rest={'HttpOnly': cookie_dict.get('httponly', False)},
-    #         )
-    #         self._cookie_jar.jar.set_cookie(cookie)
-    #     self._xsrf_token = self._cookie_jar.get("XSRF-TOKEN", "")
-    #     # Actualizar la cadena de cookies a partir del cookie jar
-    #     self._update_cookie_header()
 
     def call(self, req: device_pb2.Request) -> device_pb2.Response:
         """
@@ -284,7 +255,7 @@ class GrpcWebBaseClient:
                 "X-User-Agent": "okhttp/4.9.2",
                 "Accept": "application/json",
                 "Cookie": self._cookie,
-                # Es posible que sea necesario enviar también el token xsrf
+                # It may be necessary to send the XSRF token as well
                 "x-xsrf-token": self._xsrf_token,
             }
             try:
@@ -298,7 +269,7 @@ class GrpcWebBaseClient:
                 raise AuthenticationError(
                     f"Authentication failed with status code {response.status_code}")
 
-            # Se eliminan las cookies antiguas que el servidor indica y se añaden las nuevas
+            # The old cookies indicated by the server are removed, and the new ones are added
             for cookie_name in response.cookies.keys():
                 self._cookie_jar.delete(cookie_name)
 
@@ -314,6 +285,6 @@ class GrpcWebBaseClient:
 
             if not self._xsrf_token:
                 raise AuthenticationError("Failed to retrieve XSRF token")
-        # Actualizar la cadena de cookies a partir del cookie jar
+        
         self._update_cookie_header()
         return True

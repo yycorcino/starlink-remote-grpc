@@ -1,14 +1,16 @@
+"""
+Configuring the types of requests to Starlink API.
+"""
+
 from spacex.api.device.device_pb2 import Request, GetStatusRequest
 from spacex.api.device.dish_pb2 import DishGetStatusResponse
-from spacex.api.device.wifi_config_pb2 import WifiConfig
 from spacex.api.device.wifi_pb2 import WifiGetStatusResponse
-from grpc_web_base_client import ResponseError, GrpcWebBaseClient
-
+from grpc_web_base_client import GrpcWebBaseClient
 
 class GrpcWebClient(GrpcWebBaseClient):
     def get_dish_status(self, device_id: str) -> DishGetStatusResponse:
         """
-        Get the status for a specific device.
+        Get the status for a specific dish.
 
         Parameters:
             device_id (str): The device's ID.
@@ -63,7 +65,6 @@ class GrpcWebClient(GrpcWebBaseClient):
         Returns:
             str: The prefixed router ID.
         """
-        # Implement the prefix logic as required
         if router_id.startswith("Router-"):
             return router_id
         return f"Router-{router_id}"
