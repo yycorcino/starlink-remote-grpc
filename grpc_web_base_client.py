@@ -33,7 +33,7 @@ class ResponseError(Exception):
 
 
 class GrpcWebBaseClient:
-    def __init__(self, initial_cookies: str, cookie_storage_path: str):
+    def __init__(self):
         """
         Initialize the gRPC-Web client.
 
@@ -46,6 +46,11 @@ class GrpcWebBaseClient:
         self._lock = threading.Lock()
         self._xsrf_token: Optional[str] = None
 
+        cookie_storage_path = "dir_cookies"
+        with open("cookies.json", "r") as f:
+            cookie_json = f.read()
+            initial_cookies = self.parse_cookie_json(cookie_json)
+        
         # Generate a hash for the initial cookie
         self._cookie_hash = hashlib.sha256(
             initial_cookies.encode('utf-8')).hexdigest()
@@ -74,7 +79,16 @@ class GrpcWebBaseClient:
         self._save_cookies_to_file()
 
 
+    def parse_cookie_json(self, cookie_json: str) -> str:
+        try:
+            cookies = json.loads(cookie_json)
+            cookie_string = "; ".join(
+                f"{cookie['name']}={cookie['value']}" for cookie in cookies)
 
+            return cookie_string
+        except (json.JSONDecodeError, KeyError) as e:
+            raise ValueError(f"Error al procesar el JSON de cookies: {e}")
+    
     def _update_cookie_header(self):
         """Reconstruye la cadena de cookies a partir del cookie jar."""
         self._cookie = "; ".join(
