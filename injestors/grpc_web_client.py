@@ -1,7 +1,7 @@
-from spacex.api.device.device_pb2 import Request, GetStatusRequest, GetHistoryRequest
-from spacex.api.device.dish_pb2 import DishGetStatusResponse, DishGetHistoryResponse
-from spacex.api.device.wifi_pb2 import WifiGetStatusResponse
-from grpc_web_base_client import GrpcWebBaseClient
+from injestors.spacex.api.device.device_pb2 import Request, GetStatusRequest, GetHistoryRequest
+from injestors.spacex.api.device.dish_pb2 import DishGetStatusResponse, DishGetHistoryResponse
+from injestors.spacex.api.device.wifi_pb2 import WifiGetStatusResponse
+from injestors.grpc_web_base_client import GrpcWebBaseClient
 
 class GrpcWebClient(GrpcWebBaseClient):
     def get_dish_status(self, device_id: str) -> DishGetStatusResponse:

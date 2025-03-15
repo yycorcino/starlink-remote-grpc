@@ -1,4 +1,3 @@
-
 import os
 import json
 import time
@@ -9,7 +8,7 @@ import threading
 from http.cookiejar import Cookie
 from contextlib import contextmanager
 from http.cookies import SimpleCookie
-from spacex.api.device import device_pb2
+from injestors.spacex.api.device import device_pb2
 
 # API URLs
 STARLINK_GRPC_WEB_API_URL = "https://api2.starlink.com/SpaceX.API.Device.Device/Handle"
@@ -171,7 +170,7 @@ class GrpcWebBaseClient:
                 raise RuntimeError(f"Unknown gRPC-Web frame flag: {flag}")
         return b''.join(messages)
     
-    def generate_cookie_jar(self, cookie_storage_path="dir_cookies"):
+    def generate_cookie_jar(self, cookie_storage_path="injestors/dir_cookies"):
         # Get cookies located in file cookies.json
         initial_cookies = None
         try:
