@@ -27,7 +27,7 @@ class GrpcWebClient(GrpcWebBaseClient):
             device_id (str): The device's ID
 
         Returns:
-            device_pb2.DishGetHistoryResponse: The device's status
+            device_pb2.DishGetHistoryResponse: The device's performance data
         """
         device_id = self.add_prefix_to_dish_id(device_id)
         grpc_req = Request(target_id=device_id, get_history=GetHistoryRequest())
