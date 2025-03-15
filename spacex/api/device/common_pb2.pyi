@@ -22,6 +22,7 @@ class BootReason(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     MCU_BRINGUP_FAILED_FDIR: _ClassVar[BootReason]
     AVIATION_OUTAGE_FDIR: _ClassVar[BootReason]
     SOFTWARE_WATCHDOG: _ClassVar[BootReason]
+    HARDWARE_WATCHDOG: _ClassVar[BootReason]
 BOOT_REASON_UNKNOWN: BootReason
 FORGOTTEN: BootReason
 POWER_CYCLE: BootReason
@@ -36,9 +37,10 @@ INTENTIONAL_KERNEL_PANIC: BootReason
 MCU_BRINGUP_FAILED_FDIR: BootReason
 AVIATION_OUTAGE_FDIR: BootReason
 SOFTWARE_WATCHDOG: BootReason
+HARDWARE_WATCHDOG: BootReason
 
 class DeviceInfo(_message.Message):
-    __slots__ = ("id", "hardware_version", "board_rev", "software_version", "manufactured_version", "generation_number", "country_code", "utc_offset_s", "software_partitions_equal", "is_dev", "bootcount", "anti_rollback_version", "is_hitl", "boot", "dish_cohoused")
+    __slots__ = ("id", "hardware_version", "board_rev", "software_version", "manufactured_version", "generation_number", "country_code", "utc_offset_s", "software_partitions_equal", "is_dev", "bootcount", "anti_rollback_version", "is_hitl", "boot", "dish_cohoused", "build_id")
     ID_FIELD_NUMBER: _ClassVar[int]
     HARDWARE_VERSION_FIELD_NUMBER: _ClassVar[int]
     BOARD_REV_FIELD_NUMBER: _ClassVar[int]
@@ -54,6 +56,7 @@ class DeviceInfo(_message.Message):
     IS_HITL_FIELD_NUMBER: _ClassVar[int]
     BOOT_FIELD_NUMBER: _ClassVar[int]
     DISH_COHOUSED_FIELD_NUMBER: _ClassVar[int]
+    BUILD_ID_FIELD_NUMBER: _ClassVar[int]
     id: str
     hardware_version: str
     board_rev: int
@@ -69,7 +72,8 @@ class DeviceInfo(_message.Message):
     is_hitl: bool
     boot: BootInfo
     dish_cohoused: bool
-    def __init__(self, id: _Optional[str] = ..., hardware_version: _Optional[str] = ..., board_rev: _Optional[int] = ..., software_version: _Optional[str] = ..., manufactured_version: _Optional[str] = ..., generation_number: _Optional[int] = ..., country_code: _Optional[str] = ..., utc_offset_s: _Optional[int] = ..., software_partitions_equal: bool = ..., is_dev: bool = ..., bootcount: _Optional[int] = ..., anti_rollback_version: _Optional[int] = ..., is_hitl: bool = ..., boot: _Optional[_Union[BootInfo, _Mapping]] = ..., dish_cohoused: bool = ...) -> None: ...
+    build_id: str
+    def __init__(self, id: _Optional[str] = ..., hardware_version: _Optional[str] = ..., board_rev: _Optional[int] = ..., software_version: _Optional[str] = ..., manufactured_version: _Optional[str] = ..., generation_number: _Optional[int] = ..., country_code: _Optional[str] = ..., utc_offset_s: _Optional[int] = ..., software_partitions_equal: bool = ..., is_dev: bool = ..., bootcount: _Optional[int] = ..., anti_rollback_version: _Optional[int] = ..., is_hitl: bool = ..., boot: _Optional[_Union[BootInfo, _Mapping]] = ..., dish_cohoused: bool = ..., build_id: _Optional[str] = ...) -> None: ...
 
 class DeviceState(_message.Message):
     __slots__ = ("uptime_s",)
@@ -98,7 +102,7 @@ class GetNextIdResponse(_message.Message):
     def __init__(self, id: _Optional[int] = ..., epoch_id: _Optional[int] = ...) -> None: ...
 
 class BootInfo(_message.Message):
-    __slots__ = ("count_by_reason", "count_by_reason_delta", "last_reason", "last_count", "crash_boot", "crash_boot_count")
+    __slots__ = ("count_by_reason", "count_by_reason_delta", "last_reason", "last_count", "crash_boot", "crash_boot_count", "even_side_software_version", "odd_side_software_version", "api_version_odd_side", "api_version_even_side")
     class CountByReasonEntry(_message.Message):
         __slots__ = ("key", "value")
         KEY_FIELD_NUMBER: _ClassVar[int]
@@ -119,13 +123,21 @@ class BootInfo(_message.Message):
     LAST_COUNT_FIELD_NUMBER: _ClassVar[int]
     CRASH_BOOT_FIELD_NUMBER: _ClassVar[int]
     CRASH_BOOT_COUNT_FIELD_NUMBER: _ClassVar[int]
-    count_by_reason: _containers.ScalarMap[int, int]
-    count_by_reason_delta: _containers.ScalarMap[int, int]
+    EVEN_SIDE_SOFTWARE_VERSION_FIELD_NUMBER: _ClassVar[int]
+    ODD_SIDE_SOFTWARE_VERSION_FIELD_NUMBER: _ClassVar[int]
+    API_VERSION_ODD_SIDE_FIELD_NUMBER: _ClassVar[int]
+    API_VERSION_EVEN_SIDE_FIELD_NUMBER: _ClassVar[int]
+    count_by_reason: _containers.RepeatedCompositeFieldContainer[BootInfo.CountByReasonEntry]
+    count_by_reason_delta: _containers.RepeatedCompositeFieldContainer[BootInfo.CountByReasonDeltaEntry]
     last_reason: BootReason
     last_count: int
     crash_boot: bool
     crash_boot_count: int
-    def __init__(self, count_by_reason: _Optional[_Mapping[int, int]] = ..., count_by_reason_delta: _Optional[_Mapping[int, int]] = ..., last_reason: _Optional[_Union[BootReason, str]] = ..., last_count: _Optional[int] = ..., crash_boot: bool = ..., crash_boot_count: _Optional[int] = ...) -> None: ...
+    even_side_software_version: str
+    odd_side_software_version: str
+    api_version_odd_side: int
+    api_version_even_side: int
+    def __init__(self, count_by_reason: _Optional[_Iterable[_Union[BootInfo.CountByReasonEntry, _Mapping]]] = ..., count_by_reason_delta: _Optional[_Iterable[_Union[BootInfo.CountByReasonDeltaEntry, _Mapping]]] = ..., last_reason: _Optional[_Union[BootReason, str]] = ..., last_count: _Optional[int] = ..., crash_boot: bool = ..., crash_boot_count: _Optional[int] = ..., even_side_software_version: _Optional[str] = ..., odd_side_software_version: _Optional[str] = ..., api_version_odd_side: _Optional[int] = ..., api_version_even_side: _Optional[int] = ...) -> None: ...
 
 class PingTarget(_message.Message):
     __slots__ = ("service", "location", "address")

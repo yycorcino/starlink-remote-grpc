@@ -35,6 +35,7 @@ class User(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     ROUTER: _ClassVar[User]
     GUEST_LAN: _ClassVar[User]
     SENSITIVE_COMMANDING: _ClassVar[User]
+    LAN_TLS: _ClassVar[User]
 READ: Capability
 READ_INTERNAL: Capability
 READ_PRIVATE: Capability
@@ -59,6 +60,7 @@ FACTORY: User
 ROUTER: User
 GUEST_LAN: User
 SENSITIVE_COMMANDING: User
+LAN_TLS: User
 
 class PublicKey(_message.Message):
     __slots__ = ("key", "capabilities", "user")

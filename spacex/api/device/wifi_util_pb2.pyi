@@ -88,6 +88,13 @@ class WifiSoftwareUpdateState(int, metaclass=_enum_type_wrapper.EnumTypeWrapper)
     DOWNLOADING_UPDATE_IMAGE_FAILED: _ClassVar[WifiSoftwareUpdateState]
     DOWNLOADING_UPDATE_IMAGE_EXHAUSTED: _ClassVar[WifiSoftwareUpdateState]
     FLASHING_FAILED: _ClassVar[WifiSoftwareUpdateState]
+
+class WifiSetupRequirementState(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
+    __slots__ = ()
+    NOT_REQUIRED: _ClassVar[WifiSetupRequirementState]
+    REQUIRED_COUNTDOWN: _ClassVar[WifiSetupRequirementState]
+    REQUIRED_PAUSED: _ClassVar[WifiSetupRequirementState]
+    REQUIRED_COMPLETE: _ClassVar[WifiSetupRequirementState]
 IFACE_TYPE_UNKNOWN: IfaceType
 IFACE_TYPE_ETH: IfaceType
 IFACE_TYPE_RF_2GHZ: IfaceType
@@ -147,9 +154,13 @@ ILLEGAL_ARTIFACT: WifiSoftwareUpdateState
 DOWNLOADING_UPDATE_IMAGE_FAILED: WifiSoftwareUpdateState
 DOWNLOADING_UPDATE_IMAGE_EXHAUSTED: WifiSoftwareUpdateState
 FLASHING_FAILED: WifiSoftwareUpdateState
+NOT_REQUIRED: WifiSetupRequirementState
+REQUIRED_COUNTDOWN: WifiSetupRequirementState
+REQUIRED_PAUSED: WifiSetupRequirementState
+REQUIRED_COMPLETE: WifiSetupRequirementState
 
 class InflatedBasicServiceSet(_message.Message):
-    __slots__ = ("bssid", "ssid", "mac_lan", "iface_name", "iface_type", "channel", "preference")
+    __slots__ = ("bssid", "ssid", "mac_lan", "iface_name", "iface_type", "channel", "preference", "domain")
     BSSID_FIELD_NUMBER: _ClassVar[int]
     SSID_FIELD_NUMBER: _ClassVar[int]
     MAC_LAN_FIELD_NUMBER: _ClassVar[int]
@@ -157,6 +168,7 @@ class InflatedBasicServiceSet(_message.Message):
     IFACE_TYPE_FIELD_NUMBER: _ClassVar[int]
     CHANNEL_FIELD_NUMBER: _ClassVar[int]
     PREFERENCE_FIELD_NUMBER: _ClassVar[int]
+    DOMAIN_FIELD_NUMBER: _ClassVar[int]
     bssid: str
     ssid: str
     mac_lan: str
@@ -164,7 +176,8 @@ class InflatedBasicServiceSet(_message.Message):
     iface_type: IfaceType
     channel: int
     preference: int
-    def __init__(self, bssid: _Optional[str] = ..., ssid: _Optional[str] = ..., mac_lan: _Optional[str] = ..., iface_name: _Optional[str] = ..., iface_type: _Optional[_Union[IfaceType, str]] = ..., channel: _Optional[int] = ..., preference: _Optional[int] = ...) -> None: ...
+    domain: str
+    def __init__(self, bssid: _Optional[str] = ..., ssid: _Optional[str] = ..., mac_lan: _Optional[str] = ..., iface_name: _Optional[str] = ..., iface_type: _Optional[_Union[IfaceType, str]] = ..., channel: _Optional[int] = ..., preference: _Optional[int] = ..., domain: _Optional[str] = ...) -> None: ...
 
 class DhcpLease(_message.Message):
     __slots__ = ("ip_address", "mac_address", "hostname", "expires_time", "active", "client_id")
@@ -183,24 +196,19 @@ class DhcpLease(_message.Message):
     def __init__(self, ip_address: _Optional[str] = ..., mac_address: _Optional[str] = ..., hostname: _Optional[str] = ..., expires_time: _Optional[str] = ..., active: bool = ..., client_id: _Optional[int] = ...) -> None: ...
 
 class DhcpServer(_message.Message):
-    __slots__ = ("domain", "subnet", "leases")
+    __slots__ = ("domain", "subnet", "leases", "ip_exhausted")
     DOMAIN_FIELD_NUMBER: _ClassVar[int]
     SUBNET_FIELD_NUMBER: _ClassVar[int]
     LEASES_FIELD_NUMBER: _ClassVar[int]
+    IP_EXHAUSTED_FIELD_NUMBER: _ClassVar[int]
     domain: str
     subnet: str
     leases: _containers.RepeatedCompositeFieldContainer[DhcpLease]
-    def __init__(self, domain: _Optional[str] = ..., subnet: _Optional[str] = ..., leases: _Optional[_Iterable[_Union[DhcpLease, _Mapping]]] = ...) -> None: ...
+    ip_exhausted: bool
+    def __init__(self, domain: _Optional[str] = ..., subnet: _Optional[str] = ..., leases: _Optional[_Iterable[_Union[DhcpLease, _Mapping]]] = ..., ip_exhausted: bool = ...) -> None: ...
 
 class RadiusStatsMap(_message.Message):
     __slots__ = ("radius_stats",)
-    class RadiusStatsEntry(_message.Message):
-        __slots__ = ("key", "value")
-        KEY_FIELD_NUMBER: _ClassVar[int]
-        VALUE_FIELD_NUMBER: _ClassVar[int]
-        key: str
-        value: RadiusStatsMap.RadiusStats
-        def __init__(self, key: _Optional[str] = ..., value: _Optional[_Union[RadiusStatsMap.RadiusStats, _Mapping]] = ...) -> None: ...
     class RadiusStats(_message.Message):
         __slots__ = ("iface_name", "timeout_count", "access_request_count", "access_accept_count", "access_reject_count", "access_challenge_count", "accounting_request_count", "accounting_response_count")
         IFACE_NAME_FIELD_NUMBER: _ClassVar[int]
@@ -220,32 +228,53 @@ class RadiusStatsMap(_message.Message):
         accounting_request_count: int
         accounting_response_count: int
         def __init__(self, iface_name: _Optional[str] = ..., timeout_count: _Optional[int] = ..., access_request_count: _Optional[int] = ..., access_accept_count: _Optional[int] = ..., access_reject_count: _Optional[int] = ..., access_challenge_count: _Optional[int] = ..., accounting_request_count: _Optional[int] = ..., accounting_response_count: _Optional[int] = ...) -> None: ...
+    class RadiusStatsEntry(_message.Message):
+        __slots__ = ("key", "value")
+        KEY_FIELD_NUMBER: _ClassVar[int]
+        VALUE_FIELD_NUMBER: _ClassVar[int]
+        key: str
+        value: RadiusStatsMap.RadiusStats
+        def __init__(self, key: _Optional[str] = ..., value: _Optional[_Union[RadiusStatsMap.RadiusStats, _Mapping]] = ...) -> None: ...
     RADIUS_STATS_FIELD_NUMBER: _ClassVar[int]
-    radius_stats: _containers.MessageMap[str, RadiusStatsMap.RadiusStats]
-    def __init__(self, radius_stats: _Optional[_Mapping[str, RadiusStatsMap.RadiusStats]] = ...) -> None: ...
+    radius_stats: _containers.RepeatedCompositeFieldContainer[RadiusStatsMap.RadiusStatsEntry]
+    def __init__(self, radius_stats: _Optional[_Iterable[_Union[RadiusStatsMap.RadiusStatsEntry, _Mapping]]] = ...) -> None: ...
 
 class PoeStats(_message.Message):
-    __slots__ = ("poe_state", "poe_power", "poe_faults_fast_overcurrent", "poe_faults_slow_overcurrent", "poe_faults_overvoltage", "poe_faults_undervoltage")
+    __slots__ = ("poe_state", "poe_power", "poe_faults_fast_overcurrent", "poe_faults_slow_overcurrent", "poe_faults_overvoltage", "poe_faults_undervoltage", "vsns_vin")
     POE_STATE_FIELD_NUMBER: _ClassVar[int]
     POE_POWER_FIELD_NUMBER: _ClassVar[int]
     POE_FAULTS_FAST_OVERCURRENT_FIELD_NUMBER: _ClassVar[int]
     POE_FAULTS_SLOW_OVERCURRENT_FIELD_NUMBER: _ClassVar[int]
     POE_FAULTS_OVERVOLTAGE_FIELD_NUMBER: _ClassVar[int]
     POE_FAULTS_UNDERVOLTAGE_FIELD_NUMBER: _ClassVar[int]
+    VSNS_VIN_FIELD_NUMBER: _ClassVar[int]
     poe_state: PoeState
     poe_power: float
     poe_faults_fast_overcurrent: int
     poe_faults_slow_overcurrent: int
     poe_faults_overvoltage: int
     poe_faults_undervoltage: int
-    def __init__(self, poe_state: _Optional[_Union[PoeState, str]] = ..., poe_power: _Optional[float] = ..., poe_faults_fast_overcurrent: _Optional[int] = ..., poe_faults_slow_overcurrent: _Optional[int] = ..., poe_faults_overvoltage: _Optional[int] = ..., poe_faults_undervoltage: _Optional[int] = ...) -> None: ...
+    vsns_vin: float
+    def __init__(self, poe_state: _Optional[_Union[PoeState, str]] = ..., poe_power: _Optional[float] = ..., poe_faults_fast_overcurrent: _Optional[int] = ..., poe_faults_slow_overcurrent: _Optional[int] = ..., poe_faults_overvoltage: _Optional[int] = ..., poe_faults_undervoltage: _Optional[int] = ..., vsns_vin: _Optional[float] = ...) -> None: ...
 
 class WifiSoftwareUpdateStats(_message.Message):
-    __slots__ = ("state", "software_download_progress", "seconds_since_get_target_versions")
+    __slots__ = ("state", "software_download_progress", "seconds_since_get_target_versions", "running_version", "version_in_progress")
     STATE_FIELD_NUMBER: _ClassVar[int]
     SOFTWARE_DOWNLOAD_PROGRESS_FIELD_NUMBER: _ClassVar[int]
     SECONDS_SINCE_GET_TARGET_VERSIONS_FIELD_NUMBER: _ClassVar[int]
+    RUNNING_VERSION_FIELD_NUMBER: _ClassVar[int]
+    VERSION_IN_PROGRESS_FIELD_NUMBER: _ClassVar[int]
     state: WifiSoftwareUpdateState
     software_download_progress: float
     seconds_since_get_target_versions: float
-    def __init__(self, state: _Optional[_Union[WifiSoftwareUpdateState, str]] = ..., software_download_progress: _Optional[float] = ..., seconds_since_get_target_versions: _Optional[float] = ...) -> None: ...
+    running_version: str
+    version_in_progress: str
+    def __init__(self, state: _Optional[_Union[WifiSoftwareUpdateState, str]] = ..., software_download_progress: _Optional[float] = ..., seconds_since_get_target_versions: _Optional[float] = ..., running_version: _Optional[str] = ..., version_in_progress: _Optional[str] = ...) -> None: ...
+
+class WifiSetupRequirement(_message.Message):
+    __slots__ = ("state", "pause_countdown_seconds")
+    STATE_FIELD_NUMBER: _ClassVar[int]
+    PAUSE_COUNTDOWN_SECONDS_FIELD_NUMBER: _ClassVar[int]
+    state: WifiSetupRequirementState
+    pause_countdown_seconds: int
+    def __init__(self, state: _Optional[_Union[WifiSetupRequirementState, str]] = ..., pause_countdown_seconds: _Optional[int] = ...) -> None: ...
