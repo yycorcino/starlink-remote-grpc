@@ -81,7 +81,7 @@ if __name__ == "__main__":
         terminal_id = "ut01000000-00000000-00000000"
         fetched_telemetry = fetch_telemetry(grpc_client, terminal_id)
 
-        if fetch_telemetry:
+        if fetched_telemetry:
             formatted_telemetry, already_read_count = transform_telemetry(fetched_telemetry, already_read_count)
             insert_into_database(formatted_telemetry)
         else:
