@@ -1,4 +1,3 @@
-
 import os
 import json
 import time
@@ -9,7 +8,7 @@ import threading
 from http.cookiejar import Cookie
 from contextlib import contextmanager
 from http.cookies import SimpleCookie
-from spacex.api.device import device_pb2
+from injestors.spacex.api.device import device_pb2
 
 # API URLs
 STARLINK_GRPC_WEB_API_URL = "https://api2.starlink.com/SpaceX.API.Device.Device/Handle"
@@ -59,10 +58,10 @@ class GrpcWebBaseClient:
             try:
                 response = self._client.get(self.auth_url, headers=headers, timeout=DEFAULT_TIMEOUT)
             except httpx.RequestError as e:
-                logging.error(f"Request to '/auth-rp/auth/user' : {str(e)}")
+                logging.error(f"Request to '/auth-rp/auth/user': {str(e)}")
 
             if response.status_code != 200:
-                logging.error(f"Request to '/auth-rp/auth/user' : {response.status_code}")
+                logging.error(f"Request to '/auth-rp/auth/user': {response.status_code}")
                 
             # The old cookies indicated by the server are removed, and the new ones are added
             for cookie_name in response.cookies.keys():
@@ -77,7 +76,7 @@ class GrpcWebBaseClient:
 
             self.xsrf_token = self.cookie_jar.get("XSRF-TOKEN", "")
             if not self.xsrf_token:
-                logging.error(f"Request to '/auth-rp/auth/user' : Failed to receive 'XSRF-TOKEN'")
+                logging.error(f"Request to '/auth-rp/auth/user': Failed to receive 'XSRF-TOKEN'")
         
         self.update_cookie_header()
     
@@ -88,7 +87,6 @@ class GrpcWebBaseClient:
                 "Content-Type": "application/grpc-web+proto",
                 "Accept-Encoding": "gzip, deflate, br",
                 "x-xsrf-token": self.xsrf_token,
-
         }
     
     def make_request(self, req: device_pb2.Request) -> device_pb2.Response:
@@ -171,7 +169,7 @@ class GrpcWebBaseClient:
                 raise RuntimeError(f"Unknown gRPC-Web frame flag: {flag}")
         return b''.join(messages)
     
-    def generate_cookie_jar(self, cookie_storage_path="dir_cookies"):
+    def generate_cookie_jar(self, cookie_storage_path="injestors/dir_cookies"):
         # Get cookies located in file cookies.json
         initial_cookies = None
         try:
