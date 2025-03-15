@@ -19,4 +19,10 @@ if __name__ == "__main__":
     client = GrpcWebClient()
     response = client.get_dish_status(terminal_id)
     print(response)
+
+    # Update to your terminal id
+    terminal_id = "ut01000000-00000000-00000000"
+    client = GrpcWebClient()
+    response = client.get_dish_telemetry(terminal_id)
+    print(response)
    
