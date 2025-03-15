@@ -16,6 +16,12 @@ class UserMobilityClass(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     NOMADIC: _ClassVar[UserMobilityClass]
     MOBILE: _ClassVar[UserMobilityClass]
 
+class ObstructionMapReferenceFrame(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
+    __slots__ = ()
+    FRAME_UNKNOWN: _ClassVar[ObstructionMapReferenceFrame]
+    FRAME_EARTH: _ClassVar[ObstructionMapReferenceFrame]
+    FRAME_UT: _ClassVar[ObstructionMapReferenceFrame]
+
 class SoftwareUpdateState(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
     SOFTWARE_UPDATE_STATE_UNKNOWN: _ClassVar[SoftwareUpdateState]
@@ -64,6 +70,26 @@ class AttitudeEstimationState(int, metaclass=_enum_type_wrapper.EnumTypeWrapper)
     FILTER_FAULTED: _ClassVar[AttitudeEstimationState]
     FILTER_INVALID: _ClassVar[AttitudeEstimationState]
 
+class RebootReason(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
+    __slots__ = ()
+    REBOOT_REASON_NONE: _ClassVar[RebootReason]
+    REBOOT_REASON_MANUAL: _ClassVar[RebootReason]
+    REBOOT_REASON_LOSS_OF_COMM: _ClassVar[RebootReason]
+    REBOOT_REASON_SWUPDATE_NOW: _ClassVar[RebootReason]
+    REBOOT_REASON_SWUPDATE_SCHEDULED: _ClassVar[RebootReason]
+    REBOOT_REASON_APP: _ClassVar[RebootReason]
+    REBOOT_REASON_EMC: _ClassVar[RebootReason]
+    REBOOT_REASON_FACTORY_RESET: _ClassVar[RebootReason]
+    REBOOT_REASON_TEST_CASE: _ClassVar[RebootReason]
+    REBOOT_REASON_THERMAL_POWER_CUT: _ClassVar[RebootReason]
+    REBOOT_REASON_CRITICAL_PROCESS_DIED: _ClassVar[RebootReason]
+    REBOOT_REASON_NO_RF_READY: _ClassVar[RebootReason]
+    REBOOT_REASON_POSTPONED_LOSS_OF_COMM: _ClassVar[RebootReason]
+    REBOOT_REASON_SWUPDATE_STATIONARY: _ClassVar[RebootReason]
+    REBOOT_REASON_AAP_CRASH: _ClassVar[RebootReason]
+    REBOOT_REASON_XP70_SACS: _ClassVar[RebootReason]
+    REBOOT_REASON_INE_FAILED: _ClassVar[RebootReason]
+
 class DishState(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
     UNKNOWN: _ClassVar[DishState]
@@ -73,6 +99,9 @@ class DishState(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
 STATIONARY: UserMobilityClass
 NOMADIC: UserMobilityClass
 MOBILE: UserMobilityClass
+FRAME_UNKNOWN: ObstructionMapReferenceFrame
+FRAME_EARTH: ObstructionMapReferenceFrame
+FRAME_UT: ObstructionMapReferenceFrame
 SOFTWARE_UPDATE_STATE_UNKNOWN: SoftwareUpdateState
 IDLE: SoftwareUpdateState
 FETCHING: SoftwareUpdateState
@@ -106,6 +135,23 @@ FILTER_UNCONVERGED: AttitudeEstimationState
 FILTER_CONVERGED: AttitudeEstimationState
 FILTER_FAULTED: AttitudeEstimationState
 FILTER_INVALID: AttitudeEstimationState
+REBOOT_REASON_NONE: RebootReason
+REBOOT_REASON_MANUAL: RebootReason
+REBOOT_REASON_LOSS_OF_COMM: RebootReason
+REBOOT_REASON_SWUPDATE_NOW: RebootReason
+REBOOT_REASON_SWUPDATE_SCHEDULED: RebootReason
+REBOOT_REASON_APP: RebootReason
+REBOOT_REASON_EMC: RebootReason
+REBOOT_REASON_FACTORY_RESET: RebootReason
+REBOOT_REASON_TEST_CASE: RebootReason
+REBOOT_REASON_THERMAL_POWER_CUT: RebootReason
+REBOOT_REASON_CRITICAL_PROCESS_DIED: RebootReason
+REBOOT_REASON_NO_RF_READY: RebootReason
+REBOOT_REASON_POSTPONED_LOSS_OF_COMM: RebootReason
+REBOOT_REASON_SWUPDATE_STATIONARY: RebootReason
+REBOOT_REASON_AAP_CRASH: RebootReason
+REBOOT_REASON_XP70_SACS: RebootReason
+REBOOT_REASON_INE_FAILED: RebootReason
 UNKNOWN: DishState
 CONNECTED: DishState
 SEARCHING: DishState
@@ -126,7 +172,7 @@ class DishGetContextRequest(_message.Message):
     def __init__(self) -> None: ...
 
 class DishGetContextResponse(_message.Message):
-    __slots__ = ("device_info", "device_state", "obstruction_fraction", "obstruction_time", "obstruction_valid_s", "obstruction_current", "cell_id", "pop_rack_id", "initial_satellite_id", "initial_gateway_id", "on_backup_beam", "seconds_to_slot_end", "debug_telemetry_enabled", "pop_ping_drop_rate_15s_mean", "pop_ping_latency_ms_15s_mean", "seconds_since_last_1s_outage", "seconds_since_last_2s_outage", "seconds_since_last_5s_outage", "seconds_since_last_15s_outage", "seconds_since_last_60s_outage", "disablement_code", "ku_mac_active_ratio")
+    __slots__ = ("device_info", "device_state", "obstruction_fraction", "obstruction_time", "obstruction_valid_s", "obstruction_current", "cell_id", "pop_rack_id", "initial_satellite_id", "initial_gateway_id", "on_backup_beam", "seconds_to_slot_end", "debug_telemetry_enabled", "pop_ping_drop_rate_15s_mean", "pop_ping_latency_ms_15s_mean", "seconds_since_last_1s_outage", "seconds_since_last_2s_outage", "seconds_since_last_5s_outage", "seconds_since_last_15s_outage", "seconds_since_last_60s_outage", "outage_1s_within_1h", "outage_2s_within_1h", "outage_5s_within_1h", "disablement_code", "ku_mac_active_ratio")
     DEVICE_INFO_FIELD_NUMBER: _ClassVar[int]
     DEVICE_STATE_FIELD_NUMBER: _ClassVar[int]
     OBSTRUCTION_FRACTION_FIELD_NUMBER: _ClassVar[int]
@@ -147,6 +193,9 @@ class DishGetContextResponse(_message.Message):
     SECONDS_SINCE_LAST_5S_OUTAGE_FIELD_NUMBER: _ClassVar[int]
     SECONDS_SINCE_LAST_15S_OUTAGE_FIELD_NUMBER: _ClassVar[int]
     SECONDS_SINCE_LAST_60S_OUTAGE_FIELD_NUMBER: _ClassVar[int]
+    OUTAGE_1S_WITHIN_1H_FIELD_NUMBER: _ClassVar[int]
+    OUTAGE_2S_WITHIN_1H_FIELD_NUMBER: _ClassVar[int]
+    OUTAGE_5S_WITHIN_1H_FIELD_NUMBER: _ClassVar[int]
     DISABLEMENT_CODE_FIELD_NUMBER: _ClassVar[int]
     KU_MAC_ACTIVE_RATIO_FIELD_NUMBER: _ClassVar[int]
     device_info: _common_pb2.DeviceInfo
@@ -169,9 +218,12 @@ class DishGetContextResponse(_message.Message):
     seconds_since_last_5s_outage: float
     seconds_since_last_15s_outage: float
     seconds_since_last_60s_outage: float
+    outage_1s_within_1h: bool
+    outage_2s_within_1h: bool
+    outage_5s_within_1h: bool
     disablement_code: _ut_disablement_codes_pb2.UtDisablementCode
     ku_mac_active_ratio: float
-    def __init__(self, device_info: _Optional[_Union[_common_pb2.DeviceInfo, _Mapping]] = ..., device_state: _Optional[_Union[_common_pb2.DeviceState, _Mapping]] = ..., obstruction_fraction: _Optional[float] = ..., obstruction_time: _Optional[float] = ..., obstruction_valid_s: _Optional[float] = ..., obstruction_current: bool = ..., cell_id: _Optional[int] = ..., pop_rack_id: _Optional[int] = ..., initial_satellite_id: _Optional[int] = ..., initial_gateway_id: _Optional[int] = ..., on_backup_beam: bool = ..., seconds_to_slot_end: _Optional[float] = ..., debug_telemetry_enabled: bool = ..., pop_ping_drop_rate_15s_mean: _Optional[float] = ..., pop_ping_latency_ms_15s_mean: _Optional[float] = ..., seconds_since_last_1s_outage: _Optional[float] = ..., seconds_since_last_2s_outage: _Optional[float] = ..., seconds_since_last_5s_outage: _Optional[float] = ..., seconds_since_last_15s_outage: _Optional[float] = ..., seconds_since_last_60s_outage: _Optional[float] = ..., disablement_code: _Optional[_Union[_ut_disablement_codes_pb2.UtDisablementCode, str]] = ..., ku_mac_active_ratio: _Optional[float] = ...) -> None: ...
+    def __init__(self, device_info: _Optional[_Union[_common_pb2.DeviceInfo, _Mapping]] = ..., device_state: _Optional[_Union[_common_pb2.DeviceState, _Mapping]] = ..., obstruction_fraction: _Optional[float] = ..., obstruction_time: _Optional[float] = ..., obstruction_valid_s: _Optional[float] = ..., obstruction_current: bool = ..., cell_id: _Optional[int] = ..., pop_rack_id: _Optional[int] = ..., initial_satellite_id: _Optional[int] = ..., initial_gateway_id: _Optional[int] = ..., on_backup_beam: bool = ..., seconds_to_slot_end: _Optional[float] = ..., debug_telemetry_enabled: bool = ..., pop_ping_drop_rate_15s_mean: _Optional[float] = ..., pop_ping_latency_ms_15s_mean: _Optional[float] = ..., seconds_since_last_1s_outage: _Optional[float] = ..., seconds_since_last_2s_outage: _Optional[float] = ..., seconds_since_last_5s_outage: _Optional[float] = ..., seconds_since_last_15s_outage: _Optional[float] = ..., seconds_since_last_60s_outage: _Optional[float] = ..., outage_1s_within_1h: bool = ..., outage_2s_within_1h: bool = ..., outage_5s_within_1h: bool = ..., disablement_code: _Optional[_Union[_ut_disablement_codes_pb2.UtDisablementCode, str]] = ..., ku_mac_active_ratio: _Optional[float] = ...) -> None: ...
 
 class DishOutage(_message.Message):
     __slots__ = ("cause", "start_timestamp_ns", "duration_ns", "did_switch")
@@ -214,23 +266,25 @@ class DishOutage(_message.Message):
     def __init__(self, cause: _Optional[_Union[DishOutage.Cause, str]] = ..., start_timestamp_ns: _Optional[int] = ..., duration_ns: _Optional[int] = ..., did_switch: bool = ...) -> None: ...
 
 class DishGetHistoryResponse(_message.Message):
-    __slots__ = ("current", "pop_ping_drop_rate", "pop_ping_latency_ms", "downlink_throughput_bps", "uplink_throughput_bps", "outages")
+    __slots__ = ("current", "pop_ping_drop_rate", "pop_ping_latency_ms", "downlink_throughput_bps", "uplink_throughput_bps", "outages", "power_in")
     CURRENT_FIELD_NUMBER: _ClassVar[int]
     POP_PING_DROP_RATE_FIELD_NUMBER: _ClassVar[int]
     POP_PING_LATENCY_MS_FIELD_NUMBER: _ClassVar[int]
     DOWNLINK_THROUGHPUT_BPS_FIELD_NUMBER: _ClassVar[int]
     UPLINK_THROUGHPUT_BPS_FIELD_NUMBER: _ClassVar[int]
     OUTAGES_FIELD_NUMBER: _ClassVar[int]
+    POWER_IN_FIELD_NUMBER: _ClassVar[int]
     current: int
     pop_ping_drop_rate: _containers.RepeatedScalarFieldContainer[float]
     pop_ping_latency_ms: _containers.RepeatedScalarFieldContainer[float]
     downlink_throughput_bps: _containers.RepeatedScalarFieldContainer[float]
     uplink_throughput_bps: _containers.RepeatedScalarFieldContainer[float]
     outages: _containers.RepeatedCompositeFieldContainer[DishOutage]
-    def __init__(self, current: _Optional[int] = ..., pop_ping_drop_rate: _Optional[_Iterable[float]] = ..., pop_ping_latency_ms: _Optional[_Iterable[float]] = ..., downlink_throughput_bps: _Optional[_Iterable[float]] = ..., uplink_throughput_bps: _Optional[_Iterable[float]] = ..., outages: _Optional[_Iterable[_Union[DishOutage, _Mapping]]] = ...) -> None: ...
+    power_in: _containers.RepeatedScalarFieldContainer[float]
+    def __init__(self, current: _Optional[int] = ..., pop_ping_drop_rate: _Optional[_Iterable[float]] = ..., pop_ping_latency_ms: _Optional[_Iterable[float]] = ..., downlink_throughput_bps: _Optional[_Iterable[float]] = ..., uplink_throughput_bps: _Optional[_Iterable[float]] = ..., outages: _Optional[_Iterable[_Union[DishOutage, _Mapping]]] = ..., power_in: _Optional[_Iterable[float]] = ...) -> None: ...
 
 class DishGetStatusResponse(_message.Message):
-    __slots__ = ("device_info", "device_state", "alerts", "outage", "gps_stats", "seconds_to_first_nonempty_slot", "pop_ping_drop_rate", "downlink_throughput_bps", "uplink_throughput_bps", "pop_ping_latency_ms", "obstruction_stats", "stow_requested", "boresight_azimuth_deg", "boresight_elevation_deg", "eth_speed_mbps", "mobility_class", "is_snr_above_noise_floor", "ready_states", "class_of_service", "software_update_state", "swupdate_reboot_ready", "software_update_stats", "alignment_stats", "is_snr_persistently_low", "has_actuators", "disablement_code", "has_signed_cals", "config", "initialization_duration_seconds", "is_cell_disabled", "seconds_until_swupdate_reboot_possible", "connected_routers")
+    __slots__ = ("device_info", "device_state", "alerts", "outage", "gps_stats", "seconds_to_first_nonempty_slot", "pop_ping_drop_rate", "downlink_throughput_bps", "uplink_throughput_bps", "pop_ping_latency_ms", "obstruction_stats", "stow_requested", "boresight_azimuth_deg", "boresight_elevation_deg", "eth_speed_mbps", "mobility_class", "is_snr_above_noise_floor", "ready_states", "class_of_service", "software_update_state", "swupdate_reboot_ready", "reboot_reason", "software_update_stats", "alignment_stats", "is_snr_persistently_low", "has_actuators", "disablement_code", "has_signed_cals", "config", "initialization_duration_seconds", "is_cell_disabled", "seconds_until_swupdate_reboot_possible", "high_power_test_mode", "connected_routers", "plc_stats", "is_moving_fast_persisted", "upsu_stats")
     DEVICE_INFO_FIELD_NUMBER: _ClassVar[int]
     DEVICE_STATE_FIELD_NUMBER: _ClassVar[int]
     ALERTS_FIELD_NUMBER: _ClassVar[int]
@@ -252,6 +306,7 @@ class DishGetStatusResponse(_message.Message):
     CLASS_OF_SERVICE_FIELD_NUMBER: _ClassVar[int]
     SOFTWARE_UPDATE_STATE_FIELD_NUMBER: _ClassVar[int]
     SWUPDATE_REBOOT_READY_FIELD_NUMBER: _ClassVar[int]
+    REBOOT_REASON_FIELD_NUMBER: _ClassVar[int]
     SOFTWARE_UPDATE_STATS_FIELD_NUMBER: _ClassVar[int]
     ALIGNMENT_STATS_FIELD_NUMBER: _ClassVar[int]
     IS_SNR_PERSISTENTLY_LOW_FIELD_NUMBER: _ClassVar[int]
@@ -262,7 +317,11 @@ class DishGetStatusResponse(_message.Message):
     INITIALIZATION_DURATION_SECONDS_FIELD_NUMBER: _ClassVar[int]
     IS_CELL_DISABLED_FIELD_NUMBER: _ClassVar[int]
     SECONDS_UNTIL_SWUPDATE_REBOOT_POSSIBLE_FIELD_NUMBER: _ClassVar[int]
+    HIGH_POWER_TEST_MODE_FIELD_NUMBER: _ClassVar[int]
     CONNECTED_ROUTERS_FIELD_NUMBER: _ClassVar[int]
+    PLC_STATS_FIELD_NUMBER: _ClassVar[int]
+    IS_MOVING_FAST_PERSISTED_FIELD_NUMBER: _ClassVar[int]
+    UPSU_STATS_FIELD_NUMBER: _ClassVar[int]
     device_info: _common_pb2.DeviceInfo
     device_state: _common_pb2.DeviceState
     alerts: DishAlerts
@@ -284,6 +343,7 @@ class DishGetStatusResponse(_message.Message):
     class_of_service: UserClassOfService
     software_update_state: SoftwareUpdateState
     swupdate_reboot_ready: bool
+    reboot_reason: RebootReason
     software_update_stats: SoftwareUpdateStats
     alignment_stats: AlignmentStats
     is_snr_persistently_low: bool
@@ -294,29 +354,35 @@ class DishGetStatusResponse(_message.Message):
     initialization_duration_seconds: InitializationDurationSeconds
     is_cell_disabled: bool
     seconds_until_swupdate_reboot_possible: int
+    high_power_test_mode: bool
     connected_routers: _containers.RepeatedScalarFieldContainer[str]
-    def __init__(self, device_info: _Optional[_Union[_common_pb2.DeviceInfo, _Mapping]] = ..., device_state: _Optional[_Union[_common_pb2.DeviceState, _Mapping]] = ..., alerts: _Optional[_Union[DishAlerts, _Mapping]] = ..., outage: _Optional[_Union[DishOutage, _Mapping]] = ..., gps_stats: _Optional[_Union[DishGpsStats, _Mapping]] = ..., seconds_to_first_nonempty_slot: _Optional[float] = ..., pop_ping_drop_rate: _Optional[float] = ..., downlink_throughput_bps: _Optional[float] = ..., uplink_throughput_bps: _Optional[float] = ..., pop_ping_latency_ms: _Optional[float] = ..., obstruction_stats: _Optional[_Union[DishObstructionStats, _Mapping]] = ..., stow_requested: bool = ..., boresight_azimuth_deg: _Optional[float] = ..., boresight_elevation_deg: _Optional[float] = ..., eth_speed_mbps: _Optional[int] = ..., mobility_class: _Optional[_Union[UserMobilityClass, str]] = ..., is_snr_above_noise_floor: bool = ..., ready_states: _Optional[_Union[DishReadyStates, _Mapping]] = ..., class_of_service: _Optional[_Union[UserClassOfService, str]] = ..., software_update_state: _Optional[_Union[SoftwareUpdateState, str]] = ..., swupdate_reboot_ready: bool = ..., software_update_stats: _Optional[_Union[SoftwareUpdateStats, _Mapping]] = ..., alignment_stats: _Optional[_Union[AlignmentStats, _Mapping]] = ..., is_snr_persistently_low: bool = ..., has_actuators: _Optional[_Union[HasActuators, str]] = ..., disablement_code: _Optional[_Union[_ut_disablement_codes_pb2.UtDisablementCode, str]] = ..., has_signed_cals: bool = ..., config: _Optional[_Union[_dish_config_pb2.DishConfig, _Mapping]] = ..., initialization_duration_seconds: _Optional[_Union[InitializationDurationSeconds, _Mapping]] = ..., is_cell_disabled: bool = ..., seconds_until_swupdate_reboot_possible: _Optional[int] = ..., connected_routers: _Optional[_Iterable[str]] = ...) -> None: ...
+    plc_stats: PLCStats
+    is_moving_fast_persisted: bool
+    upsu_stats: DishUpsuStats
+    def __init__(self, device_info: _Optional[_Union[_common_pb2.DeviceInfo, _Mapping]] = ..., device_state: _Optional[_Union[_common_pb2.DeviceState, _Mapping]] = ..., alerts: _Optional[_Union[DishAlerts, _Mapping]] = ..., outage: _Optional[_Union[DishOutage, _Mapping]] = ..., gps_stats: _Optional[_Union[DishGpsStats, _Mapping]] = ..., seconds_to_first_nonempty_slot: _Optional[float] = ..., pop_ping_drop_rate: _Optional[float] = ..., downlink_throughput_bps: _Optional[float] = ..., uplink_throughput_bps: _Optional[float] = ..., pop_ping_latency_ms: _Optional[float] = ..., obstruction_stats: _Optional[_Union[DishObstructionStats, _Mapping]] = ..., stow_requested: bool = ..., boresight_azimuth_deg: _Optional[float] = ..., boresight_elevation_deg: _Optional[float] = ..., eth_speed_mbps: _Optional[int] = ..., mobility_class: _Optional[_Union[UserMobilityClass, str]] = ..., is_snr_above_noise_floor: bool = ..., ready_states: _Optional[_Union[DishReadyStates, _Mapping]] = ..., class_of_service: _Optional[_Union[UserClassOfService, str]] = ..., software_update_state: _Optional[_Union[SoftwareUpdateState, str]] = ..., swupdate_reboot_ready: bool = ..., reboot_reason: _Optional[_Union[RebootReason, str]] = ..., software_update_stats: _Optional[_Union[SoftwareUpdateStats, _Mapping]] = ..., alignment_stats: _Optional[_Union[AlignmentStats, _Mapping]] = ..., is_snr_persistently_low: bool = ..., has_actuators: _Optional[_Union[HasActuators, str]] = ..., disablement_code: _Optional[_Union[_ut_disablement_codes_pb2.UtDisablementCode, str]] = ..., has_signed_cals: bool = ..., config: _Optional[_Union[_dish_config_pb2.DishConfig, _Mapping]] = ..., initialization_duration_seconds: _Optional[_Union[InitializationDurationSeconds, _Mapping]] = ..., is_cell_disabled: bool = ..., seconds_until_swupdate_reboot_possible: _Optional[int] = ..., high_power_test_mode: bool = ..., connected_routers: _Optional[_Iterable[str]] = ..., plc_stats: _Optional[_Union[PLCStats, _Mapping]] = ..., is_moving_fast_persisted: bool = ..., upsu_stats: _Optional[_Union[DishUpsuStats, _Mapping]] = ...) -> None: ...
 
 class DishGetObstructionMapRequest(_message.Message):
     __slots__ = ()
     def __init__(self) -> None: ...
 
 class DishGetObstructionMapResponse(_message.Message):
-    __slots__ = ("num_rows", "num_cols", "snr", "min_elevation_deg", "max_theta_deg")
+    __slots__ = ("num_rows", "num_cols", "snr", "min_elevation_deg", "max_theta_deg", "map_reference_frame")
     NUM_ROWS_FIELD_NUMBER: _ClassVar[int]
     NUM_COLS_FIELD_NUMBER: _ClassVar[int]
     SNR_FIELD_NUMBER: _ClassVar[int]
     MIN_ELEVATION_DEG_FIELD_NUMBER: _ClassVar[int]
     MAX_THETA_DEG_FIELD_NUMBER: _ClassVar[int]
+    MAP_REFERENCE_FRAME_FIELD_NUMBER: _ClassVar[int]
     num_rows: int
     num_cols: int
     snr: _containers.RepeatedScalarFieldContainer[float]
     min_elevation_deg: float
     max_theta_deg: float
-    def __init__(self, num_rows: _Optional[int] = ..., num_cols: _Optional[int] = ..., snr: _Optional[_Iterable[float]] = ..., min_elevation_deg: _Optional[float] = ..., max_theta_deg: _Optional[float] = ...) -> None: ...
+    map_reference_frame: ObstructionMapReferenceFrame
+    def __init__(self, num_rows: _Optional[int] = ..., num_cols: _Optional[int] = ..., snr: _Optional[_Iterable[float]] = ..., min_elevation_deg: _Optional[float] = ..., max_theta_deg: _Optional[float] = ..., map_reference_frame: _Optional[_Union[ObstructionMapReferenceFrame, str]] = ...) -> None: ...
 
 class DishAlerts(_message.Message):
-    __slots__ = ("motors_stuck", "thermal_throttle", "thermal_shutdown", "mast_not_near_vertical", "unexpected_location", "slow_ethernet_speeds", "slow_ethernet_speeds_100", "roaming", "install_pending", "is_heating", "power_supply_thermal_throttle", "is_power_save_idle", "moving_while_not_mobile", "moving_too_fast_for_policy", "dbf_telem_stale", "low_motor_current", "lower_signal_than_predicted")
+    __slots__ = ("motors_stuck", "thermal_throttle", "thermal_shutdown", "mast_not_near_vertical", "unexpected_location", "slow_ethernet_speeds", "slow_ethernet_speeds_100", "roaming", "install_pending", "is_heating", "power_supply_thermal_throttle", "is_power_save_idle", "moving_while_not_mobile", "moving_too_fast_for_policy", "dbf_telem_stale", "low_motor_current", "lower_signal_than_predicted", "obstruction_map_reset")
     MOTORS_STUCK_FIELD_NUMBER: _ClassVar[int]
     THERMAL_THROTTLE_FIELD_NUMBER: _ClassVar[int]
     THERMAL_SHUTDOWN_FIELD_NUMBER: _ClassVar[int]
@@ -334,6 +400,7 @@ class DishAlerts(_message.Message):
     DBF_TELEM_STALE_FIELD_NUMBER: _ClassVar[int]
     LOW_MOTOR_CURRENT_FIELD_NUMBER: _ClassVar[int]
     LOWER_SIGNAL_THAN_PREDICTED_FIELD_NUMBER: _ClassVar[int]
+    OBSTRUCTION_MAP_RESET_FIELD_NUMBER: _ClassVar[int]
     motors_stuck: bool
     thermal_throttle: bool
     thermal_shutdown: bool
@@ -351,7 +418,8 @@ class DishAlerts(_message.Message):
     dbf_telem_stale: bool
     low_motor_current: bool
     lower_signal_than_predicted: bool
-    def __init__(self, motors_stuck: bool = ..., thermal_throttle: bool = ..., thermal_shutdown: bool = ..., mast_not_near_vertical: bool = ..., unexpected_location: bool = ..., slow_ethernet_speeds: bool = ..., slow_ethernet_speeds_100: bool = ..., roaming: bool = ..., install_pending: bool = ..., is_heating: bool = ..., power_supply_thermal_throttle: bool = ..., is_power_save_idle: bool = ..., moving_while_not_mobile: bool = ..., moving_too_fast_for_policy: bool = ..., dbf_telem_stale: bool = ..., low_motor_current: bool = ..., lower_signal_than_predicted: bool = ...) -> None: ...
+    obstruction_map_reset: bool
+    def __init__(self, motors_stuck: bool = ..., thermal_throttle: bool = ..., thermal_shutdown: bool = ..., mast_not_near_vertical: bool = ..., unexpected_location: bool = ..., slow_ethernet_speeds: bool = ..., slow_ethernet_speeds_100: bool = ..., roaming: bool = ..., install_pending: bool = ..., is_heating: bool = ..., power_supply_thermal_throttle: bool = ..., is_power_save_idle: bool = ..., moving_while_not_mobile: bool = ..., moving_too_fast_for_policy: bool = ..., dbf_telem_stale: bool = ..., low_motor_current: bool = ..., lower_signal_than_predicted: bool = ..., obstruction_map_reset: bool = ...) -> None: ...
 
 class DishReadyStates(_message.Message):
     __slots__ = ("cady", "scp", "l1l2", "xphy", "aap", "rf")
@@ -382,12 +450,16 @@ class DishGpsStats(_message.Message):
     def __init__(self, gps_valid: bool = ..., gps_sats: _Optional[int] = ..., no_sats_after_ttff: bool = ..., inhibit_gps: bool = ...) -> None: ...
 
 class SoftwareUpdateStats(_message.Message):
-    __slots__ = ("software_update_state", "software_update_progress")
+    __slots__ = ("software_update_state", "software_update_progress", "update_requires_reboot", "reboot_scheduled_utc_time")
     SOFTWARE_UPDATE_STATE_FIELD_NUMBER: _ClassVar[int]
     SOFTWARE_UPDATE_PROGRESS_FIELD_NUMBER: _ClassVar[int]
+    UPDATE_REQUIRES_REBOOT_FIELD_NUMBER: _ClassVar[int]
+    REBOOT_SCHEDULED_UTC_TIME_FIELD_NUMBER: _ClassVar[int]
     software_update_state: SoftwareUpdateState
     software_update_progress: float
-    def __init__(self, software_update_state: _Optional[_Union[SoftwareUpdateState, str]] = ..., software_update_progress: _Optional[float] = ...) -> None: ...
+    update_requires_reboot: bool
+    reboot_scheduled_utc_time: int
+    def __init__(self, software_update_state: _Optional[_Union[SoftwareUpdateState, str]] = ..., software_update_progress: _Optional[float] = ..., update_requires_reboot: bool = ..., reboot_scheduled_utc_time: _Optional[int] = ...) -> None: ...
 
 class AlignmentStats(_message.Message):
     __slots__ = ("has_actuators", "actuator_state", "tilt_angle_deg", "boresight_azimuth_deg", "boresight_elevation_deg", "desired_boresight_azimuth_deg", "desired_boresight_elevation_deg", "attitude_estimation_state", "attitude_uncertainty_deg")
@@ -430,6 +502,22 @@ class DishObstructionStats(_message.Message):
     avg_prolonged_obstruction_interval_s: float
     avg_prolonged_obstruction_valid: bool
     def __init__(self, currently_obstructed: bool = ..., fraction_obstructed: _Optional[float] = ..., time_obstructed: _Optional[float] = ..., valid_s: _Optional[float] = ..., patches_valid: _Optional[int] = ..., avg_prolonged_obstruction_duration_s: _Optional[float] = ..., avg_prolonged_obstruction_interval_s: _Optional[float] = ..., avg_prolonged_obstruction_valid: bool = ...) -> None: ...
+
+class DishUpsuStats(_message.Message):
+    __slots__ = ("app_version", "boot_version", "rom_version", "uptime", "dish_power", "router_power")
+    APP_VERSION_FIELD_NUMBER: _ClassVar[int]
+    BOOT_VERSION_FIELD_NUMBER: _ClassVar[int]
+    ROM_VERSION_FIELD_NUMBER: _ClassVar[int]
+    UPTIME_FIELD_NUMBER: _ClassVar[int]
+    DISH_POWER_FIELD_NUMBER: _ClassVar[int]
+    ROUTER_POWER_FIELD_NUMBER: _ClassVar[int]
+    app_version: int
+    boot_version: int
+    rom_version: int
+    uptime: int
+    dish_power: float
+    router_power: float
+    def __init__(self, app_version: _Optional[int] = ..., boot_version: _Optional[int] = ..., rom_version: _Optional[int] = ..., uptime: _Optional[int] = ..., dish_power: _Optional[float] = ..., router_power: _Optional[float] = ...) -> None: ...
 
 class InitializationDurationSeconds(_message.Message):
     __slots__ = ("attitude_initialization", "burst_detected", "ekf_converged", "first_cplane", "first_pop_ping", "gps_valid", "initial_network_entry", "network_schedule", "rf_ready", "stable_connection")
@@ -475,14 +563,6 @@ class SelfTestResponse(_message.Message):
     report: str
     def __init__(self, passed: bool = ..., report: _Optional[str] = ...) -> None: ...
 
-class StartDishSelfTestRequest(_message.Message):
-    __slots__ = ()
-    def __init__(self) -> None: ...
-
-class StartDishSelfTestResponse(_message.Message):
-    __slots__ = ()
-    def __init__(self) -> None: ...
-
 class SetTestModeRequest(_message.Message):
     __slots__ = ("rf_mode", "disable_loss_of_comm_fdir", "enable_rules_override")
     class RfMode(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
@@ -518,10 +598,12 @@ class DishSetConfigRequest(_message.Message):
     def __init__(self, dish_config: _Optional[_Union[_dish_config_pb2.DishConfig, _Mapping]] = ...) -> None: ...
 
 class DishSetConfigResponse(_message.Message):
-    __slots__ = ("updated_dish_config",)
+    __slots__ = ("updated_dish_config", "error")
     UPDATED_DISH_CONFIG_FIELD_NUMBER: _ClassVar[int]
+    ERROR_FIELD_NUMBER: _ClassVar[int]
     updated_dish_config: _dish_config_pb2.DishConfig
-    def __init__(self, updated_dish_config: _Optional[_Union[_dish_config_pb2.DishConfig, _Mapping]] = ...) -> None: ...
+    error: str
+    def __init__(self, updated_dish_config: _Optional[_Union[_dish_config_pb2.DishConfig, _Mapping]] = ..., error: _Optional[str] = ...) -> None: ...
 
 class DishGetConfigRequest(_message.Message):
     __slots__ = ()
@@ -582,8 +664,10 @@ class DishGetRssiScanResultResponse(_message.Message):
     def __init__(self, result: _Optional[_Union[_rssi_scan_pb2.DishGetRssiScanResult, _Mapping]] = ...) -> None: ...
 
 class DishFactoryResetRequest(_message.Message):
-    __slots__ = ()
-    def __init__(self) -> None: ...
+    __slots__ = ("app_reset",)
+    APP_RESET_FIELD_NUMBER: _ClassVar[int]
+    app_reset: bool
+    def __init__(self, app_reset: bool = ...) -> None: ...
 
 class DishFactoryResetResponse(_message.Message):
     __slots__ = ()
@@ -598,3 +682,55 @@ class ResetButtonRequest(_message.Message):
 class ResetButtonResponse(_message.Message):
     __slots__ = ()
     def __init__(self) -> None: ...
+
+class PLCStats(_message.Message):
+    __slots__ = ("receiving_plc", "average_time_to_empty", "average_time_to_full", "battery_health", "hardware_revision_id", "permanent_failure", "port_1_stats", "port_2_stats", "port_3_stats", "plc_revision", "safety_mode_active", "state_of_charge", "thermal_throttle_level")
+    class ProtocolRevision(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
+        __slots__ = ()
+        REV_D: _ClassVar[PLCStats.ProtocolRevision]
+    REV_D: PLCStats.ProtocolRevision
+    RECEIVING_PLC_FIELD_NUMBER: _ClassVar[int]
+    AVERAGE_TIME_TO_EMPTY_FIELD_NUMBER: _ClassVar[int]
+    AVERAGE_TIME_TO_FULL_FIELD_NUMBER: _ClassVar[int]
+    BATTERY_HEALTH_FIELD_NUMBER: _ClassVar[int]
+    HARDWARE_REVISION_ID_FIELD_NUMBER: _ClassVar[int]
+    PERMANENT_FAILURE_FIELD_NUMBER: _ClassVar[int]
+    PORT_1_STATS_FIELD_NUMBER: _ClassVar[int]
+    PORT_2_STATS_FIELD_NUMBER: _ClassVar[int]
+    PORT_3_STATS_FIELD_NUMBER: _ClassVar[int]
+    PLC_REVISION_FIELD_NUMBER: _ClassVar[int]
+    SAFETY_MODE_ACTIVE_FIELD_NUMBER: _ClassVar[int]
+    STATE_OF_CHARGE_FIELD_NUMBER: _ClassVar[int]
+    THERMAL_THROTTLE_LEVEL_FIELD_NUMBER: _ClassVar[int]
+    receiving_plc: bool
+    average_time_to_empty: int
+    average_time_to_full: int
+    battery_health: int
+    hardware_revision_id: int
+    permanent_failure: bool
+    port_1_stats: PLCPortStats
+    port_2_stats: PLCPortStats
+    port_3_stats: PLCPortStats
+    plc_revision: PLCStats.ProtocolRevision
+    safety_mode_active: bool
+    state_of_charge: int
+    thermal_throttle_level: int
+    def __init__(self, receiving_plc: bool = ..., average_time_to_empty: _Optional[int] = ..., average_time_to_full: _Optional[int] = ..., battery_health: _Optional[int] = ..., hardware_revision_id: _Optional[int] = ..., permanent_failure: bool = ..., port_1_stats: _Optional[_Union[PLCPortStats, _Mapping]] = ..., port_2_stats: _Optional[_Union[PLCPortStats, _Mapping]] = ..., port_3_stats: _Optional[_Union[PLCPortStats, _Mapping]] = ..., plc_revision: _Optional[_Union[PLCStats.ProtocolRevision, str]] = ..., safety_mode_active: bool = ..., state_of_charge: _Optional[int] = ..., thermal_throttle_level: _Optional[int] = ...) -> None: ...
+
+class PLCPortStats(_message.Message):
+    __slots__ = ("power", "status")
+    class PortStatus(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
+        __slots__ = ()
+        INACTIVE: _ClassVar[PLCPortStats.PortStatus]
+        CHARGING: _ClassVar[PLCPortStats.PortStatus]
+        DISCHARGING: _ClassVar[PLCPortStats.PortStatus]
+        MOISTURE_DETECTED: _ClassVar[PLCPortStats.PortStatus]
+    INACTIVE: PLCPortStats.PortStatus
+    CHARGING: PLCPortStats.PortStatus
+    DISCHARGING: PLCPortStats.PortStatus
+    MOISTURE_DETECTED: PLCPortStats.PortStatus
+    POWER_FIELD_NUMBER: _ClassVar[int]
+    STATUS_FIELD_NUMBER: _ClassVar[int]
+    power: int
+    status: PLCPortStats.PortStatus
+    def __init__(self, power: _Optional[int] = ..., status: _Optional[_Union[PLCPortStats.PortStatus, str]] = ...) -> None: ...
