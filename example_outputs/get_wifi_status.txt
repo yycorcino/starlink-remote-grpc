@@ -1,0 +1,246 @@
+device_info {
+  id: "Router-010000000000000000000000"
+  hardware_version: "v2"
+  software_version: "2025.04.03.mr49876"
+  country_code: "US"
+  software_partitions_equal: true
+  bootcount: 110
+  anti_rollback_version: 1
+  manufactured_version: "2022.25.0.mr15341"
+  boot {
+    count_by_reason {
+      key: 4
+      value: 69
+    }
+    count_by_reason {
+      key: 2
+      value: 32
+    }
+    count_by_reason {
+      key: 1
+      value: 1
+    }
+    count_by_reason {
+      value: 8
+    }
+    last_reason: SOFTWARE_UPDATE
+    last_count: 110
+    even_side_software_version: "2025.04.03.mr49876"
+    odd_side_software_version: "2025.04.03.mr49876"
+    api_version_odd_side: 84
+    api_version_even_side: 84
+  }
+}
+device_state {
+  uptime_s: 227464
+}
+ipv4_wan_address: "100.82.53.54/10"
+ping_latency_ms: 47.7235
+alerts {
+}
+dish_ping_latency_ms: 0.566421092
+pop_ping_latency_ms: 28.952
+ipv6_wan_addresses: "2605:59c8:700:ba8a:7624:9fff:fec1:789f/64"
+ipv6_wan_addresses: "fe80::7624:9fff:fec1:789f/64"
+dhcp_servers {
+  domain: "lan"
+  subnet: "192.168.1.0/24"
+  leases {
+    ip_address: "192.168.1.39"
+    mac_address: "b0:68:e6:XX:XX:XX"
+    hostname: "NPID"
+    expires_time: "2025-04-14 04:55:54.230452201 +0000 UTC m=+230419.871300802"
+    active: true
+    client_id: 1450303123
+  }
+  leases {
+    ip_address: "192.168.1.53"
+    mac_address: "00:1d:96:XX:XX:XX"
+    hostname: "TS"
+    expires_time: "2025-04-14 04:54:11.191904498 +0000 UTC m=+230316.832754299"
+    active: true
+    client_id: 3425333572
+  }
+}
+dhcp_servers {
+  domain: "backhaul"
+  subnet: "192.168.2.0/24"
+}
+dhcp_servers {
+  domain: "hiddenlan"
+  subnet: "192.168.254.0/24"
+}
+dish_id: "ut01000000-00000000-00000000"
+utc_ns: 1744603566867675396
+software_update_stats {
+  state: NO_UPDATE_REQUIRED
+  seconds_since_get_target_versions: 10546.2617
+  running_version: "2025.04.03.mr49876"
+}
+setup_requirement {
+}
+pop_ipv6_ping_latency_ms: 40.188
+secs_since_last_public_ipv4_change: 227194.688
+dish_disablement_code: OKAY
+config {
+  country_code: "US"
+  setup_complete: true
+  version: 7
+  mac_wan: "74:24:9f:c1:78:9f"
+  mac_lan: "74:24:9f:d1:78:9f"
+  boot_count: 110
+  incarnation: 16831778313932961215
+  wan_host_dscp_mark: 1
+  networks {
+    ipv4: "192.168.1.1/24"
+    basic_service_sets {
+      bssid: "7e:32:ac:28:f5:bf"
+      ssid: "Starlink_Network"
+      band: RF_2GHZ
+      iface_name: "ra0"
+      auth_wpa2 {
+        password: "*****"
+      }
+    }
+    basic_service_sets {
+      bssid: "7e:32:ac:38:f5:bf"
+      ssid: "Starlink_Network"
+      band: RF_5GHZ
+      iface_name: "rax0"
+      auth_wpa2 {
+        password: "*****"
+      }
+    }
+    domain: "lan"
+    dhcpv4_start: 20
+    vlan: 100
+    dhcpv4_lease_duration_s: 3600
+    dhcpv4_end: 254
+  }
+  boot {
+    count_by_reason {
+      key: 1
+      value: 1
+    }
+    count_by_reason {
+      value: 8
+    }
+    count_by_reason {
+      key: 4
+      value: 69
+    }
+    count_by_reason {
+      key: 2
+      value: 32
+    }
+    last_reason: SOFTWARE_UPDATE
+    last_count: 110
+    even_side_software_version: "2025.04.03.mr49876"
+    odd_side_software_version: "2025.04.03.mr49876"
+    api_version_odd_side: 84
+    api_version_even_side: 84
+  }
+  wan_ack_suppression {
+    ack_mark: 1056
+    htb_ack_queue_rate: 2
+    htb_ack_queue_ceil: 2.5
+    cake_queue_bandwidth: 1.75
+    cake_ack_filter_aggressive: true
+  }
+}
+clients {
+  name: "Controller"
+  mac_address: "74:24:9f:d1:78:9f"
+  rx_stats {
+  }
+  tx_stats {
+  }
+  iface: ETH
+  role: CONTROLLER
+  device_id: "Router-010000000000000000000000"
+}
+clients {
+  name: "NP"
+  mac_address: "b0:68:e6:XX:XX:XX"
+  ip_address: "192.168.1.39"
+  signal_strength: -37
+  rx_stats {
+    bytes: 1288625
+    nss: 2
+    mcs: 7
+    bandwidth: 20
+    guard_ns: 800
+    rate_mbps: 130
+    phy_mode: 2
+    rate_mbps_last_30s: 130
+    rate_mbps_last_15s: 130
+    rate_mbps_last_1m_avg: 130
+  }
+  tx_stats {
+    bytes: 1588458
+    nss: 2
+    mcs: 7
+    bandwidth: 20
+    guard_ns: 800
+    rate_mbps: 130
+    phy_mode: 2
+    rate_mbps_last_30s: 130
+    rate_mbps_last_15s: 130
+  }
+  associated_time_s: 227415
+  iface: RF_2GHZ
+  snr: 57
+  channel_width: 20
+  upstream_mac_address: "74:24:9f:d1:78:9f"
+  role: CLIENT
+  swq_checks: 2274144
+  swq_checks_non_empty: 9
+  domain: "lan"
+  iface_name: "ra0"
+  steer_state: 2
+  hops_from_controller: 1
+  ipv6_addresses: "fe80::b268:e6ff:feb7:d233"
+  client_id: 1450303123
+  fqcodel_info {
+    enqs_hi_prio: 823
+    enqs_fqcodel: 9696
+    enqs_new: 9696
+    deqs_new: 9696
+    deqs_flow_new: 9696
+  }
+  no_data_idle_s: 63
+  dhcp_lease_active: true
+  dhcp_lease_renewed: true
+  seconds_until_dhcp_lease_expires: 2988.2168
+  dhcp_lease_found: true
+  alerts {
+  }
+  captive_client_id: "93de7156519a117b6004c62578db7a38d8f5672da362e2f6209e62b4b93d73d6"
+  rx_stats_valid: true
+  tx_stats_valid: true
+}
+clients {
+  name: "TS"
+  mac_address: "00:1d:96:XX:XX:XX"
+  ip_address: "192.168.1.53"
+  rx_stats {
+  }
+  tx_stats {
+  }
+  iface: ETH
+  upstream_mac_address: "74:24:9f:d1:78:9f"
+  role: CLIENT
+  domain: "lan"
+  hops_from_controller: 1
+  client_id: 3425333572
+  dhcp_lease_active: true
+  dhcp_lease_renewed: true
+  seconds_until_dhcp_lease_expires: 2885.17847
+  dhcp_lease_found: true
+  alerts {
+  }
+  captive_client_id: "44712accbe151521e7a8c0f32dd441db8d6e8e06733e03e8a5d5a5d725547459"
+}
+client_index: -1
+radius_stats {
+}
