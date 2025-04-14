@@ -1,0 +1,98 @@
+id: 340
+api_version: 30
+dish_get_status {
+  device_info {
+    id: "ut01000000-00000000-00000000"
+    hardware_version: "hp1_proto1"
+    software_version: "2025.03.28.mr52463.1"
+    country_code: "US"
+    utc_offset_s: -35999
+    bootcount: 65
+    generation_number: 1743821687
+    build_id: "179b34fc-3ef6-489e-878d-98d26a909c40.uterm_manifest.release"
+  }
+  device_state {
+    uptime_s: 744184
+  }
+  obstruction_stats {
+    valid_s: 743730
+    avg_prolonged_obstruction_interval_s: nan
+    patches_valid: 5282
+  }
+  alerts {
+  }
+  downlink_throughput_bps: 481665.469
+  uplink_throughput_bps: 391504.719
+  pop_ping_latency_ms: 73.1947174
+  boresight_azimuth_deg: 27.6374664
+  boresight_elevation_deg: 81.5726929
+  gps_stats {
+    gps_valid: true
+    gps_sats: 24
+  }
+  eth_speed_mbps: 1000
+  mobility_class: MOBILE
+  is_snr_above_noise_floor: true
+  ready_states {
+    cady: true
+    scp: true
+    l1l2: true
+    xphy: true
+    aap: true
+    rf: true
+  }
+  class_of_service: BUSINESS
+  software_update_state: IDLE
+  has_actuators: HAS_ACTUATORS_NO
+  disablement_code: OKAY
+  has_signed_cals: true
+  software_update_stats {
+    software_update_state: IDLE
+    software_update_progress: 1
+  }
+  alignment_stats {
+    has_actuators: HAS_ACTUATORS_NO
+    tilt_angle_deg: 6.79058361
+    boresight_azimuth_deg: 27.6374664
+    boresight_elevation_deg: 81.5726929
+    attitude_estimation_state: FILTER_CONVERGED
+    attitude_uncertainty_deg: 0.449331105
+    desired_boresight_azimuth_deg: -179.81015
+    desired_boresight_elevation_deg: 69.9890518
+  }
+  initialization_duration_seconds {
+    attitude_initialization: 102
+    burst_detected: 101
+    ekf_converged: 102
+    first_cplane: 112
+    first_pop_ping: 122
+    gps_valid: 31
+    initial_network_entry: 111
+    network_schedule: 117
+    rf_ready: 39
+    stable_connection: 161
+  }
+  seconds_until_swupdate_reboot_possible: -1
+  plc_stats {
+    port_1_stats {
+    }
+    port_2_stats {
+    }
+    port_3_stats {
+    }
+  }
+  upsu_stats {
+  }
+  config {
+    swupdate_reboot_hour: 3
+    apply_snow_melt_mode: true
+    apply_location_request_mode: true
+    apply_level_dish_mode: true
+    apply_power_save_start_minutes: true
+    apply_power_save_duration_minutes: true
+    apply_power_save_mode: true
+    apply_swupdate_three_day_deferral_enabled: true
+    apply_asset_class: true
+    apply_swupdate_reboot_hour: true
+  }
+}
